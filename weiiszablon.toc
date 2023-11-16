@@ -1,0 +1,23 @@
+\babel@toc {polish}{}\relax 
+\contentsline {section}{\numberline {1}Wstęp}{\footnotesize 5}{}%
+\contentsline {subsection}{\numberline {1.1}Cel i zakres pracy}{\footnotesize 5}{}%
+\contentsline {section}{\numberline {2}Zagrożenia w aplikacjach webowych}{\footnotesize 5}{}%
+\contentsline {subsection}{\numberline {2.1}Ataki i incydenty bezpieczeństwa}{\footnotesize 5}{}%
+\contentsline {subsection}{\numberline {2.2}Przykłady znanych ataków}{\footnotesize 6}{}%
+\contentsline {section}{\numberline {3} Mechanizmy zabezpieczeń w aplikacjach webowych }{\footnotesize 7}{}%
+\contentsline {subsection}{\numberline {3.1}Autoryzacja i Uwierzytelnianie}{\footnotesize 8}{}%
+\contentsline {subsubsection}{\numberline {3.1.1}Rola autoryzacji i uwierzytelniania}{\footnotesize 8}{}%
+\contentsline {subsubsection}{\numberline {3.1.2}Metody uwierzytelniania}{\footnotesize 9}{}%
+\contentsline {subsection}{\numberline {3.2}Przetwarzanie danych wejściowych}{\footnotesize 9}{}%
+\contentsline {subsubsection}{\numberline {3.2.1}Zagrożenia związane z danymi wejściowymi}{\footnotesize 10}{}%
+\contentsline {subsubsection}{\numberline {3.2.2}Walidacja danych}{\footnotesize 11}{}%
+\contentsline {subsection}{\numberline {3.3}Protokół HTTPS}{\footnotesize 12}{}%
+\contentsline {subsection}{\numberline {3.4}Nawiązywanie połączenia przez protokół HTTPS}{\footnotesize 13}{}%
+\contentsline {section}{\numberline {4}Technologie wykorzystane do utworzenia aplikacji}{\footnotesize 14}{}%
+\contentsline {subsection}{\numberline {4.1}JavaScript}{\footnotesize 14}{}%
+\contentsline {subsection}{\numberline {4.2}TypeScript}{\footnotesize 14}{}%
+\contentsline {subsection}{\numberline {4.3}React}{\footnotesize 14}{}%
+\contentsline {subsection}{\numberline {4.4}Node.JS}{\footnotesize 15}{}%
+\contentsline {section}{\numberline {5}Efekty pracy}{\footnotesize 16}{}%
+\contentsline {section}{\numberline {6}Podsumowanie}{\footnotesize 16}{}%
+\contentsline {section}{Literatura}{\footnotesize 16}{}%
