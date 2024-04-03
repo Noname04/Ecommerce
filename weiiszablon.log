@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.6)  15 NOV 2023 16:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.6.6)  22 JAN 2024 18:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**"d:/Studia StopieÅ„ 2/Magisterka/weiiszablon.tex"
-(d:/Studia StopieÅ„ 2/Magisterka/weiiszablon.tex
+**d:/Studia2/Magisterka/weiiszablon.tex
+(d:/Studia2/Magisterka/weiiszablon.tex
 LaTeX2e <2022-11-01> patch level 1
 L3 programming layer <2023-03-30> (D:\IN\MiKTeX\tex/latex/base\article.cls
 Document Class: article 2022/07/02 v1.4n Standard LaTeX document class
@@ -488,52 +488,60 @@ Overfull \hbox (6.94582pt too wide) in paragraph at lines 197--198
 []\T1/lmr/m/n/12 Protokóª HTTPS (HTTP Se-cure) to roz-sze-rze-nie stan-dar-do-wego pro-to-koªu HTTP
  []
 
-[12] [13] [14] [15]
-Underfull \hbox (badness 10000) in paragraph at lines 263--264
+[12] [13]
+Overfull \hbox (2.31247pt too wide) in paragraph at lines 229--230
+[]\T1/lmr/bx/n/12 Testy pe-ne-tra-cyjne (pe-ne-tra-tion te-sting):\T1/lmr/m/n/12 Przeprowadzanie kon-tro-lo-wa-nych
+ []
+
+[14] [15] [16]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [17] [18]
+Underfull \hbox (badness 10000) in paragraph at lines 327--328
 []\T1/lmr/m/n/12 https://www.sunmark.org/connect/sunmark-360/12-worst-data-breaches-last-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 265--266
+Underfull \hbox (badness 10000) in paragraph at lines 329--330
 []\T1/lmr/m/n/12 https://learn.microsoft.com/en-us/entra/identity-platform/authentication-vs-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 266--267
+Underfull \hbox (badness 10000) in paragraph at lines 330--331
 []\T1/lmr/m/n/12 https://learn.microsoft.com/en-us/entra/identity/authentication/concept-
  []
 
-[16]
-Overfull \hbox (14.2264pt too wide) in paragraph at lines 278--278
+[19]
+Overfull \hbox (14.2264pt too wide) in paragraph at lines 342--342
 [][]| 
  []
 
 
-Overfull \hbox (14.2264pt too wide) in paragraph at lines 278--278
+Overfull \hbox (14.2264pt too wide) in paragraph at lines 342--342
 [][]| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 278--278
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
 [][]
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[17] (weiiszablon.aux) ) 
+[20] (weiiszablon.aux) ) 
 Here is how much of TeX's memory you used:
  7384 strings out of 476331
- 114288 string characters out of 5802774
- 1858660 words of memory out of 5000000
+ 114192 string characters out of 5802774
+ 1860660 words of memory out of 5000000
  27699 multiletter control sequences out of 15000+600000
  554579 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,13n,76p,640b,355s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,13n,76p,628b,423s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <D:/IN/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><D:/IN/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><D:/IN/MiKTeX/fonts/type1/public/lm/lmr10.pfb><D:/IN/MiKTeX/fonts/type1/public/lm/lmr12.pfb><D:/IN/MiKTeX/fonts/type1/public/lm/lmr17.pfb>
-Output written on weiiszablon.pdf (17 pages, 808978 bytes).
+Output written on weiiszablon.pdf (20 pages, 816023 bytes).
 PDF statistics:
- 84 PDF objects out of 1000 (max. 8388607)
+ 94 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

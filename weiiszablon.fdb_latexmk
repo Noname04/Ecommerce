@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1700060961 "d:/Studia Stopień 2/Magisterka/weiiszablon.tex" "weiiszablon.pdf" "weiiszablon" 1700060963 0
+["pdflatex"] 1705943549 "d:/Studia2/Magisterka/weiiszablon.tex" "weiiszablon.pdf" "weiiszablon" 1705943551 0
   "C:/Users/dawid/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1686058453 82507 a9eef8696c92627b87e9975edea03b2a ""
   "C:/Users/dawid/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1686058425 23163951 ed3e5eff8e25275c1eb476e0a7ef7d75 ""
   "D:/IN/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc" 1256929440 2375 baa924870cfb487815765f9094cf3728 ""
@@ -81,11 +81,11 @@
   "D:/IN/MiKTeX/tex/latex/tools/indentfirst.sty" 1667242266 1618 6f0598aa81f9ba5cf5d393b4abd3e091 ""
   "D:/IN/MiKTeX/tex/latex/trimspaces/trimspaces.sty" 1253165583 1380 971a51b00a14503ddf754cab24c3f209 ""
   "auxiliary/logoweii.jpg" 1435696138 629754 fc53d0837ea5b2ed4c7ef8557a9c1d89 ""
-  "d:/Studia Stopień 2/Magisterka/weiiszablon.tex" 1700060956 24894 2e41bc6eeb31e7a5c9170c3529938a36 ""
-  "weiiszablon.aux" 1700060963 3285 654993ff54dbc191c4e861b2427a0dca "pdflatex"
+  "d:/Studia2/Magisterka/weiiszablon.tex" 1705943548 31416 e3832df96352d95825bedf2f8554e934 ""
+  "weiiszablon.aux" 1705943551 4184 d4d64d91357d8c7f3efc8444b2c0ce63 "pdflatex"
   "weiiszablon.sty" 1615636497 12307 16ab64b621cd7ae5994d92f0cdf39ff8 ""
-  "weiiszablon.tex" 1700060956 24894 2e41bc6eeb31e7a5c9170c3529938a36 ""
-  "weiiszablon.toc" 1700060963 1988 85cfed2d444a959e0b819c868037d094 "pdflatex"
+  "weiiszablon.tex" 1705943548 31416 e3832df96352d95825bedf2f8554e934 ""
+  "weiiszablon.toc" 1705943551 2635 20ce40e507b0747fe231b6bd1e6d0d46 "pdflatex"
   (generated)
   "weiiszablon.aux"
   "weiiszablon.log"

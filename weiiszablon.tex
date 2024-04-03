@@ -56,7 +56,7 @@
 W dzisiejszym świecie, aplikacje webowe stały się fundamentalnym narzędziem wykorzystywanym przez praktycznie każde przedsiębiorstwo, instytucję ale również i zwykłe osoby. Służące przy rozmaitych usługach online takich jak komunikacja czy handel, aplikacje webowe stały się bardzo popularne co niestety wiąże się również ze wzrostem zagrożeń związanych z bezpieczeństwem danych. 
 Bardzo często można przeczytać lub usłyszeć o incydentach związanych z naruszeniami bezpieczeństwa, wyciekami danych jak i wielu innych atakach. Przykładem zagrożeń takich jak ataki SQL Injection, Cross-Site Scripting (XSS), Cross-Site Request Forgery (CSRF) czy ataki typu zero-day są stale obecne i stanowią poważne ryzyko dla organizacji, instytucji oraz użytkowników końcowych.
 \subsection{Cel i zakres pracy}
-Celem pracy jest zgłębienie problematyki bezpieczeństwa danych w aplikacjach webowych poprzez utworzenie aplikacji webowej na której zostaną przeprowadzone testy poprawności działania API, testy obciążeniowe, odporności na ataki oraz obsługi błędów. Wykazane błedy wykryte podczas testów zostaną następnie użyte jako podstawa do poprawienia działania aplikacji by ponownie przeprowadzić testy i porównać wyniki.
+Celem pracy jest zgłębienie problematyki bezpieczeństwa danych w aplikacjach webowych poprzez utworzenie aplikacji webowej na której zostaną przeprowadzone testy penetracyjne, odporności na ataki oraz obsługi błędów. Wykazane błedy wykryte podczas testów zostaną następnie użyte jako podstawa do poprawienia działania aplikacji by ponownie przeprowadzić testy i porównać wyniki.
 \section{Zagrożenia w aplikacjach webowych}
 
 Aplikacje webowe są narażone na różnorodne ataki, takie jak SQL Injection, gdzie intruz wstrzykuje złośliwy kod SQL, czy Cross-Site Scripting (XSS), umożliwiający wstrzykiwanie skryptów do przeglądarki użytkownika. Dodatkowo, ataki typu Cross-Site Request Forgery (CSRF) mogą prowadzić do nieautoryzowanych akcji w imieniu zalogowanego użytkownika. Zagrożenia te podkreślają potrzebę skutecznych mechanizmów zabezpieczeń. Wzrost ataków zero-day dodaje do tego wyzwanie, wymagając bieżącej analizy i reakcji na nowe, jeszcze nieznane zagrożenia.
@@ -218,14 +218,78 @@ Jak już wspomnaino HTTPS (HTTP Secure) wykorzystuje tę samą podstawową struk
     \item Klient wysyła do serwera komunikat „Zakończono”, na który Serwer odpowiada tym samym komunikatem.
     \item Po zakończeniu uzgadniania SSL/TLS klient i serwer mogą bezpiecznie wymieniać dane przy użyciu kluczy sesji.
 \end{enumerate}
-%\section{Metody Testowania Bezpieczeństwa w Aplikacjach Webowych}
-%\subsection{Penetrowanie Aplikacji Webowych}
-%\subsection{Cel i zakres testów penetracyjnych}
-%\subsection{Praktyki bezpiecznego penetrowania}
-%\subsection{Testy Podatności}
-%\subsection{Popularne rodzaje testów podatności}
-%\subsection{Narzędzia do przeprowadzania testów podatności}
+\section{Metody Testowania Bezpieczeństwa w Aplikacjach Webowych}
+Testowanie bezpieczeństwa w aplikacjach webowych ma na celu zidentyfikowanie potencjalnych luk w zabezpieczeniach i zagrożenia dla danych.
+Testy te służą ocenie trwałości systemu przed rzeczywistymi atakami. Metody testowania bezpieczeństwa obejmują analizę statyczną i dynamiczną kodu, testy przeciążenia, testy penetrujące oraz testy aplikacji mobilnych. Ważnym aspektem jest również kontrola zgodności z normami bezpieczeństwa i przepisami prawnymi. Wszystkie te metody pozwalają na identyfikację i likwidację potencjalnych słabych punktów oraz poprawę ogólnego poziomu bezpieczeństwa aplikacji webowych.
+\subsection{Rodzaje testów bezpieczeństwa}
+
+Jako rodzaje testów bezpieczeństwa można wymienić: 
+
+\begin{itemize}
+    \item \textbf{Testy penetracyjne (penetration testing):}Przeprowadzanie kontrolowanych ataków na aplikację w celu identyfikacji słabości i podatności, które mogą być wykorzystane przez potencjalnych atakujących.
+    \item \textbf{Skanowanie bezpieczeństwa (security scanning):}Automatyczne skanowanie aplikacji w celu wykrycia luk w zabezpieczeniach, nieaktualnych komponentów, czy też innych podatności.
+    \item \textbf{Analiza kodu źródłowego (static code analysis):}Ocena kodu aplikacji w poszukiwaniu potencjalnych podatności i niezabezpieczonych fragmentów kodu.
+    \item \textbf{Testy wydajności przy obciążeniu (load testing):}Sprawdzanie, jak aplikacja radzi sobie podczas obciążenia, w celu zidentyfikowania potencjalnych luk w bezpieczeństwie związanych z obciążeniem.
+    \item \textbf{Analiza ruchu sieciowego (network traffic analysis:} Monitorowanie i analiza ruchu sieciowego w celu wykrywania niezwykłych lub potencjalnie szkodliwych aktywności.
+    \item \textbf{Testy integracyjne:}Weryfikacja bezpieczeństwa integracji aplikacji z innymi systemami, w tym zewnętrznymi usługami, API czy też bazami danych.
+    \item \textbf{Analiza konfiguracji bezpieczeństwa:}Sprawdzanie, czy konfiguracja serwerów, baz danych i innych składników aplikacji jest zgodna z najlepszymi praktykami bezpieczeństwa.
+    \item \textbf{Testy uwierzytelniania i autoryzacji:} Ocena skuteczności mechanizmów uwierzytelniania i autoryzacji, aby upewnić się, że tylko uprawnione osoby mają dostęp do określonych zasobów.
+    \item \textbf{Testy bezpieczeństwa mobilnego:} Jeśli aplikacja posiada komponenty mobilne, przeprowadzane są testy specyficzne dla zagrożeń związanych z urządzeniami mobilnymi.
+    \item \textbf{Analiza raportów i logów:} Monitorowanie i analiza raportów z testów bezpieczeństwa oraz logów aplikacji w celu identyfikacji nieprawidłowości, ataków lub podejrzanej aktywności.
+\end{itemize}
+
+\subsection{Narzędzia do przeprowadzania testów bezpieczeństwa}
+\begin{enumerate}
+    \item \textbf{Narzędzia do Testów Penetracyjnych:}
+    \begin{itemize}
+        \item \textbf{Metasploit:} Platforma do testów penetracyjnych, która zawiera szereg narzędzi i exploitów do testowania bezpieczeństwa systemów.
+        \item \textbf{Burp Suite:} Narzędzie do testowania aplikacji webowych, obejmujące funkcje takie jak skanowanie podatności, analiza ruchu HTTP i wspieranie testów bezpieczeństwa.
+    \end{itemize}
+    \item \textbf{Narzędzia do Testów Aplikacji Webowych:}
+    \begin{itemize}
+        \item \textbf{OWASP ZAP (Zed Attack Proxy): } Narzędzie do testowania bezpieczeństwa aplikacji webowych, oferujące funkcje skanowania podatności, analizy bezpieczeństwa i ataków man-in-the-middle.
+        \item \textbf{Netsparker:} Automatyczne narzędzie do skanowania podatności w aplikacjach webowych, identyfikujące luki w zabezpieczeniach.
+    \end{itemize}
+    \item \textbf{Narzędzia do Analizy Statycznej Kodu:}
+    \begin{itemize}
+        \item \textbf{Checkmarx:} Narzędzie do analizy statycznej kodu, identyfikujące podatności w kodzie źródłowym aplikacji.
+        \item \textbf{Fortify Static Code Analyzer: } Narzędzie firmy Micro Focus do statycznej analizy kodu, pomagające w identyfikacji i eliminacji podatności.
+    \end{itemize}
+    \item \textbf{Narzędzia do Analizy Dynamicznej Kodu:}
+    \begin{itemize}
+        \item \textbf{AppScan (IBM Security):} Narzędzie do analizy dynamicznej kodu, skanowania podatności i testowania bezpieczeństwa aplikacji webowych.
+        \item \textbf{Veracode:}Platforma do analizy dynamicznej i statycznej kodu, dostarczająca narzędzia do oceny bezpieczeństwa aplikacji.
+    \end{itemize}
+    \item \textbf{Narzędzia do Testów Penetracyjnych Sieci:}
+    \begin{itemize}
+        \item \textbf{Wireshark:} Narzędzie do analizy ruchu sieciowego, pozwalające na monitorowanie i analizę pakietów danych w czasie rzeczywistym.
+        \item \textbf{Nmap: } Narzędzie do skanowania sieci, identyfikujące otwarte porty i usługi, a także zbierające informacje o hostach w sieci.
+    \end{itemize}
+    \item \textbf{Narzędzia do Testów Przeciążeniowych:}
+    \begin{itemize}
+        \item \textbf{Apache JMeter:} Narzędzie do testowania wydajności, przeciążenia i stabilności aplikacji, wspierające scenariusze obciążeniowe.
+        \item \textbf{Loader.io: } Narzędzie do testowania obciążenia serwerów poprzez symulowanie dużej liczby użytkowników.
+    \end{itemize}
+    \item \textbf{Narzędzia do Testów Bezpieczeństwa Aplikacji:}Mobilnych:
+    \begin{itemize}
+        \item \textbf{MobSF (Mobile Security Framework):} Platforma do analizy bezpieczeństwa aplikacji mobilnych, oferująca skanowanie podatności i analizę zachowania.
+        \item \textbf{Drozer (MWR InfoSecurity):} Narzędzie do testowania bezpieczeństwa aplikacji Android, umożliwiające analizę interakcji między aplikacjami.
+    \end{itemize}
+    \item \textbf{Narzędzia do Testów Zgodności:}
+    \begin{itemize}
+        \item \textbf{OpenSCAP:} Narzędzie do skanowania systemów pod kątem zgodności z normami bezpieczeństwa.
+        \item \textbf{Nessus:} Narzędzie do skanowania podatności, obejmujące funkcje związane z testowaniem zgodności z normami branżowymi.
+    \end{itemize}
+
+\end{enumerate}
+\subsection{Penetrowanie Aplikacji Webowych}
+
+\subsubsection{Cel i zakres testów penetracyjnych}
+\subsubsection{Praktyki bezpiecznego penetrowania}
+
 \section{Technologie wykorzystane do utworzenia aplikacji}
+Do utworzenia aplikacji wykorzystane zostały technologie takie jak JavaScript, TypeScript, React i Node.js. JavaScript jest używany po stronie klienta do dynamicznego renderowania interfejsu, natomiast TypeScript wprowadza statyczne typy i dodatkowe funkcje, poprawiając jakość i skalowalność kodu. React, jako biblioteka do budowy interfejsów użytkownika, ułatwia deklaratywne tworzenie komponentów, co przyspiesza rozwój aplikacji. Node.js, jako środowisko uruchomieniowe, umożliwia skryptowe wykonywanie kodu JavaScript po stronie serwera.
+
 \subsection{JavaScript}
 
 JavaScript to wszechstronny język programowania stosowany głównie do tworzenia interaktywnych i dynamicznych stron internetowych. Jest skryptowym językiem, co oznacza, że jego kod jest wykonywany w przeglądarce internetowej użytkownika. JavaScript umożliwia manipulację treścią strony, obsługę zdarzeń, komunikację z serwerem, a także tworzenie bogatych interfejsów użytkownika.
