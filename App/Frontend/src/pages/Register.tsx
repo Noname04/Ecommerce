@@ -23,6 +23,11 @@ const Register = () => {
             placeholder="Password"
             className="h-14 w-full pl-5 bg-slate-900/5 outline-none rounded-xl"
           />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            className="h-14 w-full pl-5 bg-slate-900/5 outline-none rounded-xl"
+          />
         </div>
         <button className="border border-gray-900 bg-gray-600 px-7 py-3 text-white transition-all hover:bg-black rounded-full my-5 w-full !rounded-md">
           Continue
