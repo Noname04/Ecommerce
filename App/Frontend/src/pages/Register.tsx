@@ -1,6 +1,9 @@
 import React from "react";
 
 const Register = () => {
+
+
+  
   return (
     <section className="mx-auto max-w-[1440px] px-6 lg:px-20 3xl:px-0 flex items-center justify-center flex-col pt-32">
       <div className="max-w-[555px] h-[600px] bg-white m-auto px-14 py-10 rounded-md">
@@ -11,6 +14,21 @@ const Register = () => {
           <input
             type="text"
             placeholder="Username"
+            className="h-14 w-full pl-5 bg-slate-900/5 outline-none rounded-xl"
+          />
+          <input
+            type="text"
+            placeholder="Firstname"
+            className="h-14 w-full pl-5 bg-slate-900/5 outline-none rounded-xl"
+          />
+          <input
+            type="text"
+            placeholder="Lastname"
+            className="h-14 w-full pl-5 bg-slate-900/5 outline-none rounded-xl"
+          />
+          <input
+            type="text"
+            placeholder="phonenumber"
             className="h-14 w-full pl-5 bg-slate-900/5 outline-none rounded-xl"
           />
           <input
