@@ -2,15 +2,13 @@ import React from "react";
 
 const Register = () => {
 
-
-  
   return (
-    <section className="mx-auto max-w-[1440px] px-6 lg:px-20 3xl:px-0 flex items-center justify-center flex-col pt-32">
-      <div className="max-w-[555px] h-[600px] bg-white m-auto px-14 py-10 rounded-md">
+    <section className=" mx-auto max-w-[1440px] px-6 lg:px-20 3xl:px-0 flex items-center justify-center flex-col pt-32">
+      <div className=" max-w-[555px] w-auto px-auto  h-auto bg-white m-auto px-14 py-10 rounded-md">
         <h3 className="text-[48px] leading-tight md:text-[50px] md:leading-[1.3] mb-8 font-bold">
           Sign up
         </h3>
-        <div className="flex flex-col gap-4 mt-7">
+        <div className=" flex flex-col gap-4 mt-7">
           <input
             type="text"
             placeholder="Username"

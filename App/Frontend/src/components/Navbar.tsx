@@ -15,10 +15,10 @@ const MenuLinks = [
 
 export const Navbar = () => {
   return (
-    <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 relative z-40">
-      <div className="flex justify-center py-4">
+    <div className="bg-white sticky top-0 dark:bg-gray-900 dark:text-white duration-200 relative z-40">
+      <div className="flex justify-center py-4 border-b-2 border-gray-500 dark:border-gray-300">
         <div className=" flex container justify-between items-center">
-          {/* Logo and links */}
+          {/* Logo and searchbar */}
           <div className="flex   items-center gap-4">
             <a
               href="/"
@@ -41,7 +41,7 @@ export const Navbar = () => {
               </div>
             </button>
             {/* Menu items */}
-            <div className="hidden lg:block">
+            <div className=" lg:block">
               <ul className="flex items-center gap-4">
                 {MenuLinks.map((data, index) => (
                   <li key={index}>

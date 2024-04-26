@@ -6,7 +6,7 @@
 
 @layer components {
     .search-bar{
-        @apply w-1 group-hover:w-[300px] transition-all duration-300 rounded-full group-hover:border group-hover:border-gray-500 px-3 py-1 focus:outline  dark:border-gray-800 dark:bg-gray-600 group-hover:dark:bg-gray-800;
+        @apply lg:w-[300px] md:w-[200px] sm:w-[100px] transition-all duration-300 rounded-full border border-gray-500 px-3 py-1 focus:outline  dark:border-gray-800 dark:bg-gray-600 group-hover:dark:bg-gray-800;
 
     }
 
