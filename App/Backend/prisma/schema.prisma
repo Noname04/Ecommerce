@@ -16,9 +16,44 @@ datasource db {
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
-  firstname String
-  lastname String
   phonenumber String?
   username  String @unique
   password String
+}
+
+model Category {
+   id Int @id @default(autoincrement())
+   name String
+   items Item[]
+}
+
+model Item {
+   id Int @id @default(autoincrement())
+   name String 
+   photo String @db.Text
+   price Float
+   ammount Int
+   sold Int
+   description String @db.Text
+   category Category @relation(fields: [categoryId],references: [id])
+   categoryId Int
+   order ItemOnOrders[]
+}
+
+  model ItemOnOrders{
+    item Item @relation(fields: [itemId],references: [id])
+    itemId Int
+    order Orders @relation(fields: [orderId],references: [id])
+    orderId Int
+    @@id([itemId,orderId])
+  }
+
+model Orders {
+  id Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  adres String
+  zipCode String
+  city String
+  items ItemOnOrders[]
 }

@@ -183,7 +183,7 @@ const Homepage = () => {
           </Slider>
         </div>
       </div>
-      {/* recomeded products  */}
+      {/* recommended products  */}
       <h1 className="py-8 dark:text-white text-[38px] pl-4 font-semibold">Polecane</h1>
       <div className="grid lg:grid-cols-5 sm:grid-cols-1  gap-4 px-8">
         {tempitems.map((data) => (
