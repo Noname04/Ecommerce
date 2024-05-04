@@ -1,9 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import Image1 from "../assets/temporary/image1.png";
 import Image2 from "../assets/temporary/image2.png";
 import Image3 from "../assets/temporary/image3.png";
-import Button from "../components/Button";
+
 
 const tempitems = [
   {
@@ -139,6 +140,12 @@ const Homepage = () => {
     pauseOnFocus: true,
   };
 
+  const navigate = useNavigate(); 
+  const routeChange = () =>{ 
+    const path = `/Product`; 
+    navigate(path);
+  }
+
   return (
     <div className="container mx-auto py-4">
       <div className="overflow-hidden rounded-3xl min-h-[550px] sm:min-h-[650px] slider-bg-color flex items-center justify-center border dark:border-gray-900">
@@ -160,11 +167,10 @@ const Homepage = () => {
                       {data.title2}
                     </h1>
                     <div className="">
-                      <Button
-                        text="Check out"
-                        bgColor="bg-red-500"
-                        textColor="text-white"
-                      ></Button>
+                      <button
+                        className='bg-red-500 text-white cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10'
+                        onClick={routeChange}
+                      >Check out</button>
                     </div>
                   </div>
                   {/* img content */}
@@ -188,18 +194,21 @@ const Homepage = () => {
       <div className="grid lg:grid-cols-5 sm:grid-cols-1  gap-4 px-8">
         {tempitems.map((data) => (
           <div key={data.id}>
-            <div className="rounded-sm border dark:border-gray-700 py-auto px-auto hover:drop-shadow-[-8px_12px_6px_rgba(0,0,0,.4)] hover:scale-105 duration-300 bg-slate-100  dark:bg-slate-800">
+            <div className="rounded-sm border cursor-pointer dark:border-gray-700 py-auto px-auto hover:drop-shadow-[-8px_12px_6px_rgba(0,0,0,.4)] hover:scale-105 duration-300 bg-slate-100  dark:bg-slate-800"
+            onClick={routeChange}
+            >
               <div className="py-6">
                 <img
                   src={data.img}
                   alt=""
-                  className="w-[120px] h-[120px] object container scale-125 my-auto mx-auto drop-shadow-[-8px_4px_12px_rgba(0,0,0,.4)] relative z-40"
+                  
+                  className="w-[120px] h-[120px] object container  scale-125 my-auto mx-auto drop-shadow-[-8px_4px_12px_rgba(0,0,0,.4)] relative z-40"
                 />
               </div>
               <div className=" dark:text-slate-400 flex flex-col justify-center gap-1 pl-2 pb-2 sm:pt-0 text-left order-2 sm:order-1 relative z-10">
-                <h1 className=" text-lg font-semibold">{data.subtitle}</h1>
-                <h1 className="text-lg font-semibold">{data.title}</h1>
-                <h1 className="text-lg font-semibold">{data.price}</h1>
+                <p className=" text-lg font-semibold">{data.subtitle}</p>
+                <p className="text-lg font-semibold">{data.title}</p>
+                <p className="text-lg font-semibold">{data.price}</p>
               </div>
             </div>
           </div>
