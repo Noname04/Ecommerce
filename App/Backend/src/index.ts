@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken"
+import { request } from "http";
 
 dotenv.config();
 
@@ -75,6 +76,41 @@ app.post("/items", async(req: Request, res:Response) => {
 
     res.json(item)
 })
+/*
+app.post("/orders", async(req: Request, res:Response) => {
+    const {firstName, lastName, adres , ZipCode, city, itemsid} = req.body;
+    if(!firstName || !lastName || !adres || !ZipCode|| !city|| !itemsid){
+        return res.status(400).send("Cannot be empty");
+    }
+
+})
+app.get("/orders/history", async(req: Request, res:Response) => {
+
+})
+
+*/
+
+app.get("/category", async(req: Request, res:Response) => {
+  const categories = await prisma.category.findMany({})
+  return res.status(200).json(categories);
+})
+
+
+app.get("/item/category/:categoryId", async(req: Request, res:Response) => {
+  const item = await prisma.item.findMany({where:{categoryId:+req.params.categoryId}})
+  return res.status(200).json(item);
+})
+
+app.get("/recommended", async(req: Request, res:Response) => {
+  const recommended = await prisma.item.findMany({orderBy:{sold:"desc"},take:10})
+  return res.status(200).json(recommended);
+})
+
+app.get("/item/:id", async(req: Request, res:Response) => {
+  const item = await prisma.item.findFirst({where:{id:+req.params.id}})
+  return res.status(200).json(item);
+})
+
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

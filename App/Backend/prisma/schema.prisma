@@ -19,6 +19,7 @@ model User {
   phonenumber String?
   username  String @unique
   password String
+  orders Orders[]
 }
 
 model Category {
@@ -56,4 +57,6 @@ model Orders {
   zipCode String
   city String
   items ItemOnOrders[]
+  user User @relation(fields: [userId],references: [id])
+  userId Int
 }
