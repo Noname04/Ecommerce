@@ -92,7 +92,6 @@ const product = () => {
   return (
     <div className="container mx-auto py-4">
       <div className=" ">
-        {" "}
         Home &gt; Category &gt; itemname
         <div >
           <h1 className=" text-[60px] font-bold">ItemName</h1>

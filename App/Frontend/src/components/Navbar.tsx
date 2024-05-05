@@ -1,23 +1,28 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import Dropmenu from "./Dropmenu";
 
-const MenuLinks = [
-  {
-    id: 1,
-    name: "Login",
-    link: "/login",
-  },
-  {
-    id: 2,
-    name: "Register",
-    link: "/register",
-  },
-];
+
 
 export const Navbar = () => {
+  const navigate = useNavigate();
+  const routeChange = () => {
+    const path = `/cart`;
+    navigate(path);
+  };
+
   return (
     <div className="bg-white sticky top-0 dark:bg-gray-900 dark:text-white duration-200 relative z-40">
       <div className="flex justify-center py-4 border-b-2 border-gray-500 dark:border-gray-300">
-        <div className=" flex container justify-between items-center">
+        {/* Drop Menu */}
+        <div className="flex items-center">
+            <div>
+              <Dropmenu/>
+            </div>
+          
+          </div>
+        <div className=" flex container  justify-between items-center">
+          
           {/* Logo and searchbar */}
           <div className="flex   items-center gap-4">
             <a
@@ -34,7 +39,10 @@ export const Navbar = () => {
           {/* navbar right section */}
           <div className="flex justify-between items-center gap-4">
             {/* Order button */}
-            <button className="relative p-3 inline-block font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200">
+            <button
+              className="relative p-3 inline-block font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
+              onClick={routeChange}
+            >
               Cart
               <div className="w-4 h-4 bg-red-500 text-white rounder-full absolute top-0 right-0 flex items-center justify-center text-xs">
                 4
@@ -43,16 +51,26 @@ export const Navbar = () => {
             {/* Menu items */}
             <div className=" lg:block">
               <ul className="flex items-center gap-4">
-                {MenuLinks.map((data, index) => (
-                  <li key={index}>
-                    <a
-                      href={data.link}
-                      className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
-                    >
-                      {data.name}
-                    </a>
+                <a href="/login">
+                  <li className="className=' inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200 ">
+                    Login
                   </li>
-                ))}
+                </a>
+                <a href="/register">
+                  <li className="className=' inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200">
+                    Register
+                  </li>
+                </a>
+                <a href="/profile">
+                  <li className="className='inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200 ">
+                    My profile
+                  </li>
+                </a>
+                <a href="/" /*onClick={() => localStorage.clear()}*/>
+                  <li className="className='inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200">
+                    Logout
+                  </li>
+                </a>
               </ul>
             </div>
           </div>
