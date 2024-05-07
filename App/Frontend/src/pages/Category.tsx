@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Image1 from "../assets/temporary/image1.png";
 import Image2 from "../assets/temporary/image2.png";
 import Image3 from "../assets/temporary/image3.png";
+import { useParams } from "react-router-dom";
+import { DataContext } from "../context/DataContext";
 
 const tempitems = [
   {
@@ -87,36 +89,48 @@ const tempitems = [
 ];
 
 const Category = () => {
+
+  {/* Database connect */}
+  const {
+    categoryitems,
+    categoryitemslist,
+  } = useContext(DataContext);
+
+  useEffect(() => {
+    categoryitemslist(id);
+  }, []);
+
+  const { id } = useParams();
+
+
   return (
     <div className="container mx-auto py-4">
 
       <h1 className="px-8 py-8 font-semibold text-5xl">Category Name</h1>
       <div>
-        {tempitems.map((data,index) => (
+        {categoryitems.map((data) => (
           <div className="bg-gray-50 flex flex-col my-2 border-b-2"
-          key={index}>
+          key={data.id}>
             {/* Product Name */}
             <div className="flex px-14">
             <h1 className=" px-2 font-bold  text-xl">
-              {data.title}  
-             
+              {data.name}  
             </h1>
-            <p className=" font-bold text-xl"> {data.title2}</p>
             </div>
             {/* item details */}
             <div className="flex gap-4 justify-between  gap-4 ">
               {/* item image */}
               <div className=" w-full xl:max-w-[500px] lg:max-w-[400px]  scale-75">
-                <img src={data.img} alt="" className="px-12" />
+                <img src={data.photo} alt="" className="px-12" />
               </div>
               {/* item description */}
               <div className=" text-xl  xl:max-w-[800px] lg:max-w-[470px]  my-12">
-                <p className="">{data.subtitle}</p>
+                <p className="">{data.description}</p>
                 
               </div>
               {/* button and price */}
               <div className="my-32 px-4 ">
-              <p className="mx-8 text-4xl py-2">{data.price}</p>
+              <p className="mx-8 text-4xl py-2">${data.price}</p>
                 <button className=" bg-red-500 text-white   hover:scale-105 duration-300 py-2 px-12 rounded-full">Into cart</button>
               </div>
             </div>

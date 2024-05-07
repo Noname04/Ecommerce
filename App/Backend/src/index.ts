@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken"
 import { request } from "http";
+import cors from 'cors';
+
 
 dotenv.config();
 
@@ -10,6 +12,12 @@ const app: Express = express();
 app.use(express.json());
 const prisma = new PrismaClient();
 const port = process.env.PORT || 3000;
+
+{/* cors */}
+
+
+app.use(cors());
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
@@ -62,20 +70,7 @@ app.post("/category", async(req: Request, res:Response) => {
   res.json(category)
 })
 
-app.post("/items", async(req: Request, res:Response) => {
-  const {name,photo,price,ammount, sold,description,category} = req.body;
-  if(!name || !photo ||!price || !ammount || !sold || !description || !category){
-    return res.status(400).send("Cannot be empty");
-  }
-    const cat = await prisma.category.findFirst({where:{name:category}})
-    if(!cat)
-      return res.status(400).send("Category not found");
-    const item = await prisma.item.create({
-      data: {name,photo,price,ammount, sold,description,category: {connect:{id:cat.id}}},
-    });
 
-    res.json(item)
-})
 /*
 app.post("/orders", async(req: Request, res:Response) => {
     const {firstName, lastName, adres , ZipCode, city, itemsid} = req.body;
@@ -95,6 +90,20 @@ app.get("/category", async(req: Request, res:Response) => {
   return res.status(200).json(categories);
 })
 
+app.post("/items", async(req: Request, res:Response) => {
+  const {name,photo,price,ammount, sold,description,category} = req.body;
+  if(!name || !photo ||!price || !ammount || !sold || !description || !category){
+    return res.status(400).send("Cannot be empty");
+  }
+    const cat = await prisma.category.findFirst({where:{name:category}})
+    if(!cat)
+      return res.status(400).send("Category not found");
+    const item = await prisma.item.create({
+      data: {name,photo,price,ammount, sold,description,category: {connect:{id:cat.id}}},
+    });
+
+    res.json(item)
+})
 
 app.get("/item/category/:categoryId", async(req: Request, res:Response) => {
   const item = await prisma.item.findMany({where:{categoryId:+req.params.categoryId}})

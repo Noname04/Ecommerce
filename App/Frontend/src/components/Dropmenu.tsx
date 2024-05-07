@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
+import { DataContext } from "../context/DataContext";
+/* 
 const MenuLinks = [
   {
     id: 1,
@@ -32,8 +33,21 @@ const MenuLinks = [
     link: "/category",
   },
 ];
-
+*/
 const dropmenu = () => {
+
+  {/* Database connect */}
+
+  const {
+    categories,
+    categorylist,
+  } = useContext(DataContext);
+
+  useEffect(() => {
+    categorylist();
+  }, []);
+
+
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="relative flex flex-col items-center rounded-lg">
@@ -43,13 +57,13 @@ const dropmenu = () => {
       >
         Menu
       </button>
-      <div className=" flex flex-col rounded-lg items-start absolute top-[50px] duration-150 left-1 w-auto bg-blue-200">
+      <div className=" flex flex-col w-[250px] rounded-lg items-start absolute top-[50px] duration-150 left-1 bg-blue-200">
         
-        {isOpen && MenuLinks.map((data,index) => (
-        <div className="flex w-full justify-between hover:bg-blue-300">
-          <ul className="py-2 px-2 " key={index}>
+        {isOpen && categories.map((data) => (
+        <div className="flex w-full justify-between hover:bg-blue-300" key={data.id}>
+          <ul className="py-2 px-2 " key={data.id}>
             <a
-              href={data.link}
+              href={"/category/"+data.id}
               className="inline-block px-4 font-semibold text-gray-600 hover:text-black dark:hover:text-white duration-200"
             >
               {data.name}

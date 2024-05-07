@@ -8,23 +8,26 @@ import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import Category from "./pages/Category";
+import { DataProvider } from "./context/DataContext";
 
 function App() {
   return (
     <>
       <div>
+      <DataProvider>
         <BrowserRouter>
           <Navbar />
           <Routes>
             <Route path="/" element={<Homepage/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
-            <Route path="/product" element={<Product/>}/>
+            <Route path="/product/:id" element={<Product/>}/>
             <Route path="/cart" element={<Cart/>}/>
             <Route path="/profile" element={<Profile/>}/>
-            <Route path="/category" element={<Category/>}/>
+            <Route path="/category/:id" element={<Category/>}/>
           </Routes>
         </BrowserRouter>
+        </DataProvider>
       </div>
     </>
   );

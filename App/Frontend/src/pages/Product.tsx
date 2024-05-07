@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Image1 from "../assets/temporary/image1.png";
 import Image2 from "../assets/temporary/image2.png";
 import Image3 from "../assets/temporary/image3.png";
+import { DataContext } from "../context/DataContext";
+import { useParams } from "react-router-dom";
 
 const tempitems = [
   {
@@ -89,18 +91,31 @@ const tempitems = [
 */
 
 const product = () => {
+
+  
+  {/* Database connect */}
+  const {
+    itemdetails,
+    showitemdetails,
+  } = useContext(DataContext);
+
+  useEffect(() => {
+    showitemdetails(id);
+  }, []);
+
+  const { id } = useParams();
+
   return (
     <div className="container mx-auto py-4">
       <div className=" ">
-        Home &gt; Category &gt; itemname
+        Home &gt; Category 
         <div >
-          <h1 className=" text-[60px] font-bold">ItemName</h1>
-          {tempitems.map((data) => (
+          <h1 className=" text-[60px] font-bold">{itemdetails.name}</h1>
             <div className="grid grid-cols-3 py-12 ">
               {/* item image  */}
               <div className="">
                 <img
-                  src={data.img}
+                  src={itemdetails.photo}
                   alt=""
                   className="px-12"
                 />
@@ -108,17 +123,16 @@ const product = () => {
               {/* item description  */}
               <div className="">
               <h1 className="text-lg font-semibold">Description</h1>
-              <p className="  ">{data.description}</p>
+              <p className="  ">{itemdetails.description}</p>
               </div>
               {/* item cost to cart button  */}
               <div className="mx-auto py-4 ">
-                <p className=" mx-8 py-4 text-4xl">{data.price}</p>
+                <p className=" mx-8 py-4 text-4xl">${itemdetails.price}</p>
               <button className="bg-red-500 text-white my-32  hover:scale-105 duration-300 py-2 px-8 rounded-full ">
                 Add to cart
               </button>
               </div>
             </div>
-          ))}
         </div>
       </div>
     </div>

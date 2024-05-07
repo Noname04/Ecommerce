@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import Image1 from "../assets/temporary/image1.png";
 import Image2 from "../assets/temporary/image2.png";
 import Image3 from "../assets/temporary/image3.png";
+import { DataContext } from "../context/DataContext";
 
 
 const tempitems = [
@@ -128,6 +129,20 @@ const SlideData = [
 ];
 
 const Homepage = () => {
+  
+  {/* Database connect */}
+  const {
+    itemlist,
+    item,
+  } = useContext(DataContext);
+
+  useEffect(() => {
+    itemlist();
+  }, []);
+
+  console.log(item);
+
+  {/* Slider settings */}
   const settings = {
     dots: false,
     arrows: true,
@@ -141,8 +156,8 @@ const Homepage = () => {
   };
 
   const navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    const path = `/Product`; 
+  const routeChange = (id) =>{ 
+    const path = `/product/${id}`; 
     navigate(path);
   }
 
@@ -169,7 +184,7 @@ const Homepage = () => {
                     <div className="">
                       <button
                         className='bg-red-500 text-white cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10'
-                        onClick={routeChange}
+                        onClick={()=> {routeChange(data.id)}}
                       >Check out</button>
                     </div>
                   </div>
@@ -190,25 +205,24 @@ const Homepage = () => {
         </div>
       </div>
       {/* recommended products  */}
-      <h1 className="py-8 dark:text-white text-[38px] pl-4 font-semibold">Polecane</h1>
+      <h1 className="py-8 dark:text-white text-[38px] pl-4 font-semibold">Recommended</h1>
       <div className="grid lg:grid-cols-5 sm:grid-cols-1  gap-4 px-8">
-        {tempitems.map((data) => (
+        {item.map((data) => (
           <div key={data.id}>
             <div className="rounded-sm border cursor-pointer dark:border-gray-700 py-auto px-auto hover:drop-shadow-[-8px_12px_6px_rgba(0,0,0,.4)] hover:scale-105 duration-300 bg-slate-100  dark:bg-slate-800"
-            onClick={routeChange}
+            onClick={()=> {routeChange(data.id)}}
             >
               <div className="py-6">
                 <img
-                  src={data.img}
+                  src={data.photo}
                   alt=""
                   
                   className="w-[120px] h-[120px] object container  scale-125 my-auto mx-auto drop-shadow-[-8px_4px_12px_rgba(0,0,0,.4)] relative z-40"
                 />
               </div>
               <div className=" dark:text-slate-400 flex flex-col justify-center gap-1 pl-2 pb-2 sm:pt-0 text-left order-2 sm:order-1 relative z-10">
-                <p className=" text-lg font-semibold">{data.subtitle}</p>
-                <p className="text-lg font-semibold">{data.title}</p>
-                <p className="text-lg font-semibold">{data.price}</p>
+                <p className="text-lg font-semibold">{data.name}</p>
+                <p className="text-lg font-semibold">${data.price}</p>
               </div>
             </div>
           </div>
