@@ -1,9 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 
 
 const Category = () => {
+
 
   {/* Database connect */}
   const {
@@ -14,6 +16,8 @@ const Category = () => {
   useEffect(() => {
     categoryitemslist(id);
   }, []);
+
+      {/* cart context */}
 
   const { id } = useParams();
 
@@ -28,7 +32,7 @@ const Category = () => {
 
   return (
     <div className="container mx-auto py-4">
-
+      
       <h1 className="px-8 py-14 font-semibold text-5xl">Category Name</h1>
       <div>
         {categoryitems.map((data) => (

@@ -5,6 +5,7 @@ import Image1 from "../assets/temporary/image1.png";
 import Image2 from "../assets/temporary/image2.png";
 import Image3 from "../assets/temporary/image3.png";
 import { DataContext } from "../context/DataContext";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 
 
 const SlideData = [
@@ -46,18 +47,26 @@ const SlideData = [
 ];
 
 const Homepage = () => {
+
+    {/* Database context */}
+    const {
+      itemlist,
+      item,
+    } = useContext(DataContext);
   
-  {/* Database connect */}
-  const {
-    itemlist,
-    item,
-  } = useContext(DataContext);
+    useEffect(() => {
+      itemlist();
+    }, []);
+  
+    //console.log(item);
+  {/* cart context */}
 
-  useEffect(() => {
-    itemlist();
-  }, []);
+  const { getItemQuantity} = useShoppingCart()
 
-  console.log(item);
+  const quantity = getItemQuantity(item.map((data) => (
+    data.id)));
+  
+    console.log(quantity)
 
   {/* Slider settings */}
   const settings = {

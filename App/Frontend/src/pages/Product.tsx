@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { DataContext } from "../context/DataContext";
 import { useParams } from "react-router-dom";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 
 const product = () => {
 
-  
+   
   {/* Database connect */}
   const {
     itemdetails,
@@ -16,6 +17,12 @@ const product = () => {
   }, []);
 
   const { id } = useParams();
+
+   {/* cart context */}
+
+   const { increaseItemQuantity} = useShoppingCart()
+
+  
 
   return (
     <div className="container mx-auto py-4">
@@ -40,7 +47,8 @@ const product = () => {
               {/* item cost and to cart button  */}
               <div className="mx-auto py-4 ">
                 <p className=" mx-8 py-4 text-4xl">${itemdetails.price}</p>
-              <button className="bg-red-500 text-white my-32  hover:scale-105 duration-300 py-2 px-8 rounded-full ">
+              <button className="bg-red-500 text-white my-8  hover:scale-105 duration-300 py-2 px-8 rounded-full "
+              onClick={()=>increaseItemQuantity(itemdetails)}>
                 Add to cart
               </button>
               </div>

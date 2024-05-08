@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import Category from "./pages/Category";
 import { DataProvider } from "./context/DataContext";
+import { ShoppingCartProvider } from "./context/ShoppingCartContext";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <div>
       <DataProvider>
         <BrowserRouter>
+        <ShoppingCartProvider>
           <Navbar />
           <Routes>
             <Route path="/" element={<Homepage/>}/>
@@ -26,6 +28,7 @@ function App() {
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/category/:id" element={<Category/>}/>
           </Routes>
+          </ShoppingCartProvider>
         </BrowserRouter>
         </DataProvider>
       </div>

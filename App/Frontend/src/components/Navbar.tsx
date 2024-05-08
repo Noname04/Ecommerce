@@ -1,8 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Dropmenu from "./Dropmenu";
+import { useShoppingCart } from "../context/ShoppingCartContext";
 
 export const Navbar = () => {
+
+    {/* cart context */}
+
+    const { cartQuantity} = useShoppingCart()
+
+
   const navigate = useNavigate();
   const routeChange = () => {
     const path = `/cart`;
@@ -41,7 +48,7 @@ export const Navbar = () => {
             >
               Cart
               <div className="w-4 h-4 bg-red-500 text-white rounder-full absolute bottom-0 right-0 flex items-center justify-center text-xs">
-                4
+                {cartQuantity}
               </div>
             </button>
             {/* Menu items */}
