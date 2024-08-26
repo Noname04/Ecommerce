@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import Image1 from "../assets/temporary/image1.png";
@@ -143,7 +143,7 @@ const Homepage = () => {
                   src={data.photo}
                   alt=""
                   
-                  className="w-[120px] h-[120px] object container  scale-125 my-auto mx-auto drop-shadow-[-8px_4px_12px_rgba(0,0,0,.4)] relative z-40"
+                  className="w-[120px] h-[120px] object container  scale-125 my-auto mx-auto drop-shadow-[-8px_4px_12px_rgba(0,0,0,.4)]  z-40"
                 />
               </div>
               <div className=" dark:text-slate-400 flex flex-col justify-center gap-1 pl-2 pb-2 sm:pt-0 text-left order-2 sm:order-1 relative z-10">

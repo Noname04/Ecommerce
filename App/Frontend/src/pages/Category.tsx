@@ -9,14 +9,18 @@ const Category = () => {
 
   {/* Database connect */}
   const {
+    category,
+    singleCategory,
     categoryitems,
     categoryitemslist,
   } = useContext(DataContext);
 
   useEffect(() => {
     categoryitemslist(id);
+    singleCategory(id)
   }, []);
 
+  console.log(category)
       {/* cart context */}
 
   const { id } = useParams();
@@ -33,7 +37,7 @@ const Category = () => {
   return (
     <div className="container mx-auto py-4">
       
-      <h1 className="px-8 py-14 font-semibold text-5xl">Category Name</h1>
+      <h1 className="px-8 py-14 font-semibold text-5xl">{category.name}</h1>
       <div>
         {categoryitems.map((data) => (
           <div className="bg-gray-200 flex flex-col my-8 border-b-2 cursor-pointer

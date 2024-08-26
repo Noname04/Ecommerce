@@ -1,10 +1,11 @@
-import React, { useState, createContext } from "react";
+import { useState, createContext } from "react";
 
-export const DataContext = createContext();
+export const DataContext = createContext('');
 
 export const DataProvider = (props) => {
   const [item, setItem] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState([]);
   const [categoryitems, setCategoryItems] = useState([]);
   const [itemdetails, setItemDetails] = useState([]);
   
@@ -19,6 +20,16 @@ export const DataProvider = (props) => {
         .then((data) => setItem(data));
   };
 
+  {/* single category */}
+
+
+const singleCategory = (id:number) => {
+  if (item.length === 0)
+    fetch(`http://localhost:3000/category/${id}`)
+      .then((res) => res.json())
+      .then((data) => setCategory(data));
+};
+
   {/* categories */}
 
   const categorylist = () => {
@@ -30,7 +41,7 @@ export const DataProvider = (props) => {
 
   {/* items from category */}
 
-  const categoryitemslist = (id) => {
+  const categoryitemslist = (id:number) => {
     if(id)
       fetch(`http://localhost:3000/item/category/${id}`)
         .then((res) => res.json())
@@ -39,7 +50,7 @@ export const DataProvider = (props) => {
 
   {/* item deteails */}
 
-  const showitemdetails = (id) => {
+  const showitemdetails = (id:number) => {
     if(id)
       fetch(`http://localhost:3000/item/${id}`)
         .then((res) => res.json())
@@ -58,6 +69,8 @@ export const DataProvider = (props) => {
         categoryitemslist,
         itemdetails,
         showitemdetails,
+        category,
+        singleCategory,
 
       }}
     >

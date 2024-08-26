@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { DataContext } from "../context/DataContext";
 import { useParams } from "react-router-dom";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 
-const product = () => {
+const Product = () => {
 
    
   {/* Database connect */}
@@ -63,4 +63,4 @@ const product = () => {
   );
 };
 
-export default product;
+export default Product;

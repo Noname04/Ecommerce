@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 
@@ -7,7 +7,7 @@ const Register = () => {
   const [email, setEmail] = useState("  ");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [phonenumber, setPhonenumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [serverResponse, setServerResponse] = useState("");
   const [infoUser, setInfoUser] = useState(false);
   const [infoPassword, setInfoPassword] = useState(false);
@@ -30,16 +30,17 @@ const Register = () => {
   */
 
   const handleSubmit = async () => {
-    if (username && email && password && phonenumber && confirmPassword) {
+    if (username && email && password && phoneNumber && confirmPassword) {
       if (
         username.length >= 1 &&
         password.length >= 1 &&
-        emailRegex.test(email)
+        password === confirmPassword &&
+        emailRegex.test(email) 
       ) {
         const requestOptions = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password, phonenumber }),
+          body: JSON.stringify({ username, email, password, phoneNumber }),
         };
         console.log("sent")
         const response = await fetch(
@@ -53,7 +54,8 @@ const Register = () => {
           console.log(data);
         } else {
           navigate("/login");
-          window.location.reload(false);
+          window.location.reload();
+          //window.location.reload(false);
         }
       }
     }
@@ -100,9 +102,9 @@ const Register = () => {
           ) : null}
           <input
             type="text"
-            placeholder="phonenumber"
+            placeholder="phoneNumber"
             className="h-14 w-full pl-5  outline-none rounded-xl"
-            onChange={(e) => setPhonenumber(e.target.value)}
+            onChange={(e) => setPhoneNumber(e.target.value)}
             onFocus={() => {
             }}
           />
@@ -138,7 +140,7 @@ const Register = () => {
           ) : null}
         </div>
         <button
-          className="border border-gray-900 bg-gray-600 px-7 py-3 text-white transition-all hover:bg-black rounded-full my-5 w-full !rounded-md"
+          className="border border-gray-900 bg-gray-600 px-7 py-3 text-white transition-all hover:bg-black rounded-full my-5 w-full "
           onClick={() => {
             handleSubmit();
             setSent(true);

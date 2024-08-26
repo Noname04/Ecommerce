@@ -23,6 +23,10 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
+app.get("/profile", async (req: Request, res: Response) => {
+
+});
+
 app.post("/register", async (req: Request, res: Response) => {
   const { email, phonenumber, username, password } =
     req.body;
@@ -38,11 +42,15 @@ app.post("/register", async (req: Request, res: Response) => {
   if (userNameAvailability) return res.status(400).send("Username is taken");
   if (EmailAvailability) return res.status(400).send("Email is taken");
 
-  const user = await prisma.user.create({
-    data: { email, phonenumber, username, password },
-  });
+  try {
+    await prisma.user.create({
+      data: { email, phonenumber, username, password },
+    });
 
-  res.json(user);
+    return res.status(201).json({ message: 'user created' });
+  } catch {
+    return res.status(400).json({ error: 'invalid request' });
+  }
 });
 
 app.post("/login", async (req: Request, res: Response) => {
@@ -79,10 +87,9 @@ app.post("/orders", async(req: Request, res:Response) => {
     }
 
 })
-app.get("/orders/history", async(req: Request, res:Response) => {
+app.get("/user/orders", async(req: Request, res:Response) => {
 
 })
-
 */
 
 app.get("/category", async(req: Request, res:Response) => {
@@ -90,19 +97,24 @@ app.get("/category", async(req: Request, res:Response) => {
   return res.status(200).json(categories);
 })
 
+app.get("/category/:categoryId", async(req: Request, res:Response) => {
+  const singlecategory = await prisma.category.findFirst({where:{id:+req.params.categoryId}})
+  return res.status(200).json(singlecategory);
+})
+
 app.post("/items", async(req: Request, res:Response) => {
-  const {name,photo,price,ammount, sold,description,category} = req.body;
-  if(!name || !photo ||!price || !ammount || !sold || !description || !category){
+  const {name,photo,price,amount, sold,description,category} = req.body;
+  if(!name || !photo ||!price || !amount || !sold || !description || !category){
     return res.status(400).send("Cannot be empty");
   }
     const cat = await prisma.category.findFirst({where:{name:category}})
     if(!cat)
       return res.status(400).send("Category not found");
     const item = await prisma.item.create({
-      data: {name,photo,price,ammount, sold,description,category: {connect:{id:cat.id}}},
+      data: {name,photo,price,amount, sold,description,category: {connect:{id:cat.id}}},
     });
 
-    res.json(item)
+    res.status(200).json(item)
 })
 
 app.get("/item/category/:categoryId", async(req: Request, res:Response) => {

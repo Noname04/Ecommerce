@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 
-const login = () => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [validation, setValidation] = useState(false);
@@ -30,7 +30,8 @@ const login = () => {
       if (data.token) {
         localStorage.setItem("token", data.token);
         navigate("/");
-        window.location.reload(false);
+        window.location.reload();
+        //window.location.reload(false);
       }
     }
   };
@@ -67,7 +68,7 @@ const login = () => {
           ) : null}
         </div>
         <button
-          className="border border-gray-900 bg-gray-600 px-7 py-3 text-white transition-all hover:bg-black rounded-full my-5 w-full !rounded-md"
+          className="border border-gray-900 bg-gray-600 px-7 py-3 text-white transition-all hover:bg-black rounded-full my-5 w-full"
           onClick={() => {
             handleSubmit();
             setSent(true);
@@ -95,4 +96,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
