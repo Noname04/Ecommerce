@@ -47,27 +47,20 @@ model OrderItem {
   item         Item           @relation(fields: [itemId], references: [id])
   itemId       Int
   amount       Int
-  ItemOnOrders ItemOnOrders[]
-}
-
-model ItemOnOrders {
-  item    OrderItem @relation(fields: [itemId], references: [id])
-  itemId  Int
   order   Orders    @relation(fields: [orderId], references: [id])
   orderId Int
-
-  @@id([itemId, orderId])
 }
+
 
 model Orders {
   id        Int            @id @default(autoincrement())
   firstName String
   lastName  String
-  adres     String
+  address    String
   zipCode   String
   city      String
   status    String         @default("pending")
-  items     ItemOnOrders[]
+  items     OrderItem[]
   user      User           @relation(fields: [userId], references: [id])
   userId    Int
 }

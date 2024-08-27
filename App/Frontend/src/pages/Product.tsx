@@ -20,7 +20,7 @@ const Product = () => {
 
    {/* cart context */}
 
-   const { increaseItemQuantity} = useShoppingCart()
+   const { increaseItemAmount} = useShoppingCart()
 
   
 
@@ -48,7 +48,7 @@ const Product = () => {
               <div className="mx-auto py-4 ">
                 <p className=" mx-8 py-4 text-4xl">${itemdetails.price}</p>
               <button className="bg-red-500 text-white my-8  hover:scale-105 duration-300 py-2 px-8 rounded-full "
-              onClick={()=>increaseItemQuantity(itemdetails)}>
+              onClick={()=>increaseItemAmount(itemdetails)}>
                 Add to cart
               </button>
               </div>

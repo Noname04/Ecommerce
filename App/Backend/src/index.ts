@@ -98,15 +98,16 @@ app.post("/category", async (req: Request, res: Response) => {
 });
 
 app.post("/orders", async (req: Request, res: Response) => {
-  const { firstName, lastName, adres, zipCode, city, items } = req.body as {
+  const { firstName, lastName, address, zipCode, city, items } = req.body as {
     firstName: string;
     lastName: string;
-    adres: string;
+    address: string;
     zipCode: string;
     city: string;
     items: Array<{ id: number; amount: number }> ;
   };
-  if (!firstName || !lastName || !adres || !zipCode || !city || !items) {
+  if (!firstName || !lastName || !address || !zipCode || !city || !items) {
+    console.log(req.body)
     return res.status(400).send("Cannot be empty");
   }
   const userId = await getTokenFrom(req);
@@ -120,7 +121,7 @@ app.post("/orders", async (req: Request, res: Response) => {
     data: {
       firstName,
       lastName,
-      adres,
+      address,
       zipCode,
       city,
       items:{

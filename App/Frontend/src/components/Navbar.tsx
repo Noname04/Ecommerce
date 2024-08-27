@@ -8,7 +8,7 @@ export const Navbar = () => {
     /* cart context */
   }
 
-  const { cartQuantity } = useShoppingCart();
+  const { cartAmount } = useShoppingCart();
 
   const navigate = useNavigate();
   const routeChange = () => {
@@ -43,7 +43,7 @@ export const Navbar = () => {
         >
           Cart
           <div className="w-4 h-4 bg-red-500 text-white rounder-full absolute bottom-0 right-0 flex items-center justify-center text-xs">
-            {cartQuantity}
+            {cartAmount}
           </div>
         </button>
         {/* Menu items */}
@@ -68,7 +68,7 @@ export const Navbar = () => {
                   My profile
                 </li>
               </a>
-              <a href="/" onClick={() => localStorage.clear()}>
+              <a href="/" onClick={() => localStorage.removeItem("token")}>
                 <li className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200">
                   Logout
                 </li>
