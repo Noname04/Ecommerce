@@ -1,7 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
-import { useShoppingCart } from "../context/ShoppingCartContext";
 
 
 const Category = () => {

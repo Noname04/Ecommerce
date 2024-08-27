@@ -1,19 +1,33 @@
+import { DataContext } from "../context/DataContext";
+import { useContext, useEffect } from "react";
 
 const profile = () => {
+  /*
+  { Database connect }
+  const {
+    showUserDetails,
+    userDetails,
+  } = useContext(DataContext);
 
+  useEffect(() => {
+    showUserDetails(id)
+  }, []);
+ */
 
   return (
-    <section className="mx-auto max-w-[1440px] px-6 lg:px-20 3xl:px-0 flex items-center justify-center flex-col pt-32">
-      <div className="max-w-[555px] h-auto bg-slate-500 m-auto px-14 py-10 rounded-md">
-            <div className="flex px-4">
-              <h1 className=" text-2xl mr-4">Username:</h1>
-            </div>
-            <div className="flex px-4">
-              <h1 className=" text-2xl mr-4">Email:</h1>
-            </div>
+    <div className="flex justify-between p-10">
+      {/* user info */}
+      <div className="">
+        <h1>Username:</h1>
+        <h1>Email:</h1>
       </div>
-    </section>
-  )
-}
+      {/* user orders history */}
 
-export default profile
+      <div className="bg-slate-300 w-max py-2 max-h-[970px] overflow-scroll overflow-x-hidden">
+        test
+</div>
+    </div>
+  );
+};
+
+export default profile;

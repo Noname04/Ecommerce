@@ -5,7 +5,6 @@ import Image1 from "../assets/temporary/image1.png";
 import Image2 from "../assets/temporary/image2.png";
 import Image3 from "../assets/temporary/image3.png";
 import { DataContext } from "../context/DataContext";
-import { useShoppingCart } from "../context/ShoppingCartContext";
 
 
 const SlideData = [
@@ -61,12 +60,6 @@ const Homepage = () => {
     //console.log(item);
   {/* cart context */}
 
-  const { getItemQuantity} = useShoppingCart()
-
-  const quantity = getItemQuantity(item.map((data) => (
-    data.id)));
-  
-    console.log(quantity)
 
   {/* Slider settings */}
   const settings = {
