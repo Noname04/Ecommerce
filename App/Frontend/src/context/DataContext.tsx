@@ -21,7 +21,7 @@ export const DataProvider = (props:any) => {
   const [category, setCategory] = useState([]);
 
   const singleCategory = (id: number) => {
-    if (item.length === 0)
+    if (category.length === 0)
       fetch(`http://localhost:3000/category/${id}`)
         .then((res) => res.json())
         .then((data) => setCategory(data));
@@ -57,7 +57,7 @@ export const DataProvider = (props:any) => {
     /* item deteails */
   }
 
-  const [itemdetails, setItemDetails] = useState([]);
+  const [itemdetails, setItemDetails] = useState(null);
 
   const showitemdetails = (id: number) => {
     if (id)

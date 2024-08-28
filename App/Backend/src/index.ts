@@ -230,6 +230,7 @@ app.get("/recommended", async (req: Request, res: Response) => {
   const recommended = await prisma.item.findMany({
     orderBy: { sold: "desc" },
     take: 10,
+    include:{category:true}
   });
   return res.status(200).json(recommended);
 });

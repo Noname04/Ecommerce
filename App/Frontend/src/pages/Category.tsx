@@ -52,8 +52,8 @@ const Category = () => {
             {/* item details */}
             <div className="flex gap-4 justify-between  ">
               {/* item image */}
-              <div className=" w-full xl:max-w-[500px] lg:max-w-[400px]  scale-75">
-                <img src={data.photo} alt="" className="px-12" />
+              <div className=" w-full xl:max-w-[500px] max-h-[500px] lg:max-w-[400px]  scale-75">
+                <img src={data.photo[0]} alt="" className="px-12 max-h-[500px]" />
               </div>
               {/* item description */}
               <div className=" text-xl  xl:max-w-[800px] lg:max-w-[470px]  my-12">

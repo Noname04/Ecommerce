@@ -79,26 +79,28 @@ const Homepage = () => {
     const path = `/product/${id}`; 
     navigate(path);
   }
-
+  
   return (
+    
     <div className="container mx-auto py-4">
+     
       <div className="overflow-hidden rounded-3xl min-h-[550px] sm:min-h-[650px] slider-bg-color flex items-center justify-center border dark:border-gray-900">
         <div className="container pb-8 sm:pb-0 ">
           {/* Main section */}
           <Slider {...settings}>
-            {SlideData.map((data) => (
+            {item.map((data) => (
               <div key={data.id}>
-                <div className="grid  grid-cols-1 sm:grid-cols-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 py-2">
                   {/* text content */}
                   <div className="flex flex-col justify-center gap-4 sm:pl-3 pt-12 sm:pt-0 text-center sm:text-left order-2 sm:order-1 relative z-10 ">
                     <h1 className="text-2xl sm:text-6xl lg:text-2xl font-bold">
-                      {data.subtitle}
+                      {data.category.name}
                     </h1>
                     <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold">
-                      {data.title}
+                      {data.name}
                     </h1>
                     <h1 className="text-5xl uppercase text-white dark:text-white/5 sm:text-[80px] md:text-[100px] xl:text-[150px] font-bold ">
-                      {data.title2}
+                      ${data.price}
                     </h1>
                     <div className="">
                       <button
@@ -111,7 +113,7 @@ const Homepage = () => {
                   <div className="order-1 sm:order-2">
                     <div>
                       <img
-                        src={data.img}
+                        src={data.photo[0]}
                         alt=""
                         className="w-[300px] h-[300px] sm:h-[450px] scale-95 object container mx-auto drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)] relative z-40"
                       />
@@ -124,7 +126,7 @@ const Homepage = () => {
         </div>
       </div>
       {/* recommended products  */}
-      <h1 className="py-8 dark:text-white text-[38px] pl-4 font-semibold">Recommended</h1>
+      <h1 className="py-8 dark:text-white text-[38px] pl-4 font-semibold" onClick={()=> {console.log(item)}}>Recommended</h1>
       <div className="grid lg:grid-cols-5 sm:grid-cols-1  gap-4 px-8">
         {item.map((item) => (
           <div key={item.id}>
@@ -133,7 +135,7 @@ const Homepage = () => {
             >
               <div className="py-6">
                 <img
-                  src={item.photo}
+                  src={item.photo[0]}
                   alt=""
                   
                   className="w-[120px] h-[120px] object container  scale-125 my-auto mx-auto drop-shadow-[-8px_4px_12px_rgba(0,0,0,.4)]  z-40"
@@ -147,6 +149,7 @@ const Homepage = () => {
           </div>
         ))}
       </div>
+      
     </div>
   );
 };
