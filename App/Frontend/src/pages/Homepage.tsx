@@ -126,22 +126,22 @@ const Homepage = () => {
       {/* recommended products  */}
       <h1 className="py-8 dark:text-white text-[38px] pl-4 font-semibold">Recommended</h1>
       <div className="grid lg:grid-cols-5 sm:grid-cols-1  gap-4 px-8">
-        {item.map((data) => (
-          <div key={data.id}>
+        {item.map((item) => (
+          <div key={item.id}>
             <div className="rounded-sm border cursor-pointer dark:border-gray-700 py-auto px-auto hover:drop-shadow-[-8px_12px_6px_rgba(0,0,0,.4)] hover:scale-105 duration-300 bg-slate-100  dark:bg-slate-800"
-            onClick={()=> {routeChange(data.id)}}
+            onClick={()=> {routeChange(item.id)}}
             >
               <div className="py-6">
                 <img
-                  src={data.photo}
+                  src={item.photo}
                   alt=""
                   
                   className="w-[120px] h-[120px] object container  scale-125 my-auto mx-auto drop-shadow-[-8px_4px_12px_rgba(0,0,0,.4)]  z-40"
                 />
               </div>
               <div className=" dark:text-slate-400 flex flex-col justify-center gap-1 pl-2 pb-2 sm:pt-0 text-left order-2 sm:order-1 relative z-10">
-                <p className="text-lg font-semibold">{data.name}</p>
-                <p className="text-lg font-semibold">${data.price}</p>
+                <p className="text-lg font-semibold">{item.name}</p>
+                <p className="text-lg font-semibold">${item.price}</p>
               </div>
             </div>
           </div>

@@ -70,16 +70,14 @@ export const DataProvider = (props:any) => {
     /* user details */
   }
 
-  const [userDetails, setUserDetails] = useState([]);
+  const [userDetails, setUserDetails] = useState(null);
 
-  const showUserDetails = (id: number) => {
+  const showUserDetails = () => {
 
     const requestOptions = {
       method: "GET",
       headers: { authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-
-    if (id)
       fetch(`http://localhost:3000/profile/`,requestOptions)
         .then((res) => res.json())
         .then((data) => setUserDetails(data));

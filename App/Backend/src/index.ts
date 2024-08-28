@@ -34,7 +34,22 @@ app.get("/profile", async (req: Request, res: Response) => {
   try {
     const user = await prisma.user.findFirst({
       where: { id: userId },
-      select: { email: true, username: true, phonenumber: true, orders: true },
+      select: {
+        email: true,
+        username: true,
+        phonenumber: true,
+        orders: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            status: true,
+            date: true,
+            fullPrice: true,
+            items:{select:{item:true, amount:true}},
+          },
+        },
+      },
     });
 
     return res.status(200).json(user);
@@ -78,7 +93,7 @@ app.post("/login", async (req: Request, res: Response) => {
   const token = jwt.sign(
     { id: checkdata.id, username: checkdata.username },
     process.env.SECRET!,
-    { expiresIn: "1h" }
+    { expiresIn: "2h" }
   );
 
   res.json({ token });
@@ -104,13 +119,36 @@ app.post("/orders", async (req: Request, res: Response) => {
     address: string;
     zipCode: string;
     city: string;
-    items: Array<{ id: number; amount: number }> ;
+    items: Array<{ id: number; amount: number }>;
   };
-  if (!firstName || !lastName || !address || !zipCode || !city || !items) {
-    console.log(req.body)
+  if (
+    !firstName ||
+    !lastName ||
+    !address ||
+    !zipCode ||
+    !city ||
+    !items ||
+    items.length === 0
+  ) {
+    console.log(req.body);
     return res.status(400).send("Cannot be empty");
   }
   const userId = await getTokenFrom(req);
+
+  {/* obliczanie pełnej ceny zamówienia */}
+  const productIds = items.map(item => item.id);
+  const products = await prisma.item.findMany({
+    where: {id: {in: productIds} },
+    select: {id: true,price:true},
+  });
+
+  let fullPrice = items.reduce((sum, item) =>{
+    const product = products.find(p => p.id === item.id);
+    return sum + (product ? product.price * item.amount : 0);
+  }, 0);
+
+  fullPrice = parseFloat(fullPrice.toFixed(2));
+  console.log(fullPrice)
 
   if (userId === null) {
     return res.status(403).json({
@@ -124,19 +162,20 @@ app.post("/orders", async (req: Request, res: Response) => {
       address,
       zipCode,
       city,
-      items:{
-        create:items.map((item) =>({
-          amount:item.amount,
-          item:{
-            connect:{id:item.id}
+      fullPrice,
+      items: {
+        create: items.map((item) => ({
+          amount: item.amount,
+          item: {
+            connect: { id: item.id },
           },
         })),
       },
-      user:{connect:{id:userId}}
+      user: { connect: { id: userId } },
     },
   });
   res.status(201).json(order);
-  });
+});
 
 app.get("/category", async (req: Request, res: Response) => {
   const categories = await prisma.category.findMany({});
@@ -196,7 +235,9 @@ app.get("/recommended", async (req: Request, res: Response) => {
 });
 
 app.get("/item/:id", async (req: Request, res: Response) => {
-  const item = await prisma.item.findFirst({ where: { id: +req.params.id } });
+  const item = await prisma.item.findFirst({ where: { id: +req.params.id }, 
+  include:{category:true}}
+  );
   return res.status(200).json(item);
 });
 

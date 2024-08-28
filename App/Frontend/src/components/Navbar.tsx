@@ -17,7 +17,7 @@ export const Navbar = () => {
   };
 
   return (
-    <div className="bg-white sticky top-0 dark:bg-gray-900 dark:text-white duration-200 z-40 flex py-4 px-2 justify-between items-center border-b-2 border-gray-500 dark:border-gray-300">
+    <div className="bg-white sticky top-0 dark:bg-gray-900 bg-gray-300 dark:text-white duration-200 z-40 flex py-4 px-2 justify-between items-center border-b-2 border-gray-500 dark:border-gray-300">
       {/* Drop Menu */}
       <div className="flex">
         <Dropmenu />
@@ -38,7 +38,7 @@ export const Navbar = () => {
       {/* cart button */}
       <div className="flex items-center gap-2">
         <button
-          className="relative p-3 inline-block font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200"
+          className="relative p-3 inline-block font-semibold text-gray-600 hover:text-black dark:hover:text-white duration-200"
           onClick={routeChange}
         >
           Cart
@@ -51,12 +51,12 @@ export const Navbar = () => {
           {localStorage.getItem("token") === null ? (
             <>
               <a href="/login">
-                <li className=" inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200 ">
+                <li className=" inline-block px-4 font-semibold text-black hover:text-black dark:hover:text-white duration-200 ">
                   Login
                 </li>
               </a>
               <a href="/register">
-                <li className=" inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200">
+                <li className=" inline-block px-4 font-semibold text-black hover:text-black dark:hover:text-white duration-200">
                   Register
                 </li>
               </a>
@@ -64,12 +64,12 @@ export const Navbar = () => {
           ) : (
             <>
               <a href="/profile">
-                <li className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200 ">
+                <li className="inline-block px-4 font-semibold text-black hover:text-black dark:hover:text-white duration-200 ">
                   My profile
                 </li>
               </a>
               <a href="/" onClick={() => localStorage.removeItem("token")}>
-                <li className="inline-block px-4 font-semibold text-gray-500 hover:text-black dark:hover:text-white duration-200">
+                <li className="inline-block px-4 font-semibold text-black hover:text-black dark:hover:text-white duration-200">
                   Logout
                 </li>
               </a>

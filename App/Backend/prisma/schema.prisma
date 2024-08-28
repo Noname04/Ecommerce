@@ -60,6 +60,8 @@ model Orders {
   zipCode   String
   city      String
   status    String         @default("pending")
+  date      DateTime       @default(now())
+  fullPrice Float
   items     OrderItem[]
   user      User           @relation(fields: [userId], references: [id])
   userId    Int

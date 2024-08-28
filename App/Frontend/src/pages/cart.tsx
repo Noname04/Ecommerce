@@ -1,11 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "../components/Modal";
 
 import {
-  ShoppingCartProvider,
   useShoppingCart,
 } from "../context/ShoppingCartContext";
-import { DataContext } from "../context/DataContext";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
@@ -60,7 +58,6 @@ const Cart = () => {
             <button
               className="bg-red-500 text-white   hover:scale-105 duration-300 my-4 py-2 px-12 rounded-full"
               onClick={() => {setOpen(true)
-                console.log(cartItems,cartAmount)
               }}
             >
               Confirm Order
@@ -122,21 +119,20 @@ const Cart = () => {
           </Modal>
         </div>
         {cartAmount !== 0 ? (
-          <div className="bg-slate-300 py-2 max-h-[970px] overflow-scroll overflow-x-hidden">
+          <div className="bg-slate-300 py-2 max-h-[670px] overflow-scroll overflow-x-hidden">
             {cartItems.map((data) => (
               <div
-                className=" flex my-8 gap-8 items-center justify-between mx-[200px] "
+                className=" flex my-4 gap-4 items-center justify-between mx-[100px] "
                 key={data.id}
               >
                 {/* item details */}
-                <div className="flex w-[650px]  border-b-2 bg-gray-200  ">
+                <div className="flex max-h-[150px] items-center justify-between w-[450px]  border-b-2 bg-gray-200  ">
                   {/* item image */}
-                  <div className=" scale-90 ">
-                    <img src={data.photo} alt="" className="px-12 " />
-                  </div>
+                    <img src={data.photo} alt="" className="px-12  max-w-[200px] max-h-[100px]" />
+
                   {/* Product Name */}
-                  <div className="   xl:max-w-[800px] lg:max-w-[470px]  my-12">
-                    <p className="text-4xl font-bold">{data.name}</p>
+                  <div className="   ">
+                    <p className="text-2xl font-bold">{data.name}</p>
                     <p className=" text-xl py-2">
                       ${data.price} x{data.amount}
                     </p>
