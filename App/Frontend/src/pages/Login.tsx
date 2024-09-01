@@ -5,33 +5,32 @@ import Alert from "@mui/material/Alert";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [validation, setValidation] = useState(false);
   const [sent, setSent] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     if (username && password) {
-      console.log("wysłano");
       const requestOptions = {
         method: "POST",
+        credentials: "include" as RequestCredentials,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       };
-
       const response = await fetch(
         "http://localhost:3000/login",
         requestOptions
       );
-      const data = await response.json();
+      
       if (response.status !== 200) {
-        setValidation(true);
-      }
-      if (data.token) {
-        localStorage.setItem("token", data.token);
+        console.log(response.json())
+      } else {
+        const data = await response.json();
+        console.log("wysłano");
+        console.log('Logged in successfully:', data.message); 
+        localStorage.setItem("token", "true");
         navigate("/");
         window.location.reload();
-        //window.location.reload(false);
       }
     }
   };
@@ -76,12 +75,6 @@ const Login = () => {
         >
           Continue
         </button>
-        {sent && !validation && username && password ? (
-          <Alert className="mb-4" severity="error">
-            {" "}
-            Wrong email or password.{" "}
-          </Alert>
-        ) : null}
         <p className="text-black font-bold">
           Don't have an account?{" "}
           <a

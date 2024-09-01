@@ -29,8 +29,7 @@ const Cart = () => {
     if (firstName && lastName && address && zipCode && city && cartItems){
       const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ firstName, lastName, address, zipCode,city,items:cartItems }),
       };
       const response = await fetch(
@@ -40,6 +39,8 @@ const Cart = () => {
       const data = await response.json();
         if (response.status !== 201) {
           console.log(data);
+          navigate("/login")
+          localStorage.removeItem("token")
         } else {
           navigate("/");
           localStorage.removeItem("shopping-cart")

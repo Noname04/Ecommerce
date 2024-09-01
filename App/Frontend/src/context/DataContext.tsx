@@ -1,8 +1,11 @@
-import { useState, createContext, Context } from "react";
+import { useState, createContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const DataContext = createContext("");
 
 export const DataProvider = (props:any) => {
+  const navigate = useNavigate();
+  
   {
     /* recommended items */
   }
@@ -72,15 +75,23 @@ export const DataProvider = (props:any) => {
 
   const [userDetails, setUserDetails] = useState(null);
 
-  const showUserDetails = () => {
+  const showUserDetails = async() => {
+
 
     const requestOptions = {
       method: "GET",
-      headers: { authorization: `Bearer ${localStorage.getItem("token")}` },
+      credentials: "include" as RequestCredentials,
     };
-      fetch(`http://localhost:3000/profile/`,requestOptions)
-        .then((res) => res.json())
-        .then((data) => setUserDetails(data));
+      const request = await fetch(`http://localhost:3000/profile/`,requestOptions)
+    if(request.ok){
+      const data = await request.json()
+      setUserDetails(data);
+    } else if(request.status=== 403){
+
+      navigate("/")
+      localStorage.removeItem("token")
+
+    }
   };
 
 

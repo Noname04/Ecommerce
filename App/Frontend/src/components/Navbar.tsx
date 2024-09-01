@@ -63,7 +63,7 @@ export const Navbar = () => {
             </>
           ) : (
             <>
-              <a href="/profile">
+              <a href="/profile" >
                 <li className="inline-block px-4 font-semibold text-black hover:text-black dark:hover:text-white duration-200 ">
                   My profile
                 </li>

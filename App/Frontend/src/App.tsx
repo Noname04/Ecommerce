@@ -13,9 +13,9 @@ import { ShoppingCartProvider } from "./context/ShoppingCartContext";
 function App() {
   return (
     <>
-      <div>
-      <DataProvider>
+      <div>     
         <BrowserRouter>
+        <DataProvider>
         <ShoppingCartProvider>
           <Navbar />
           <Routes>
@@ -28,8 +28,8 @@ function App() {
             <Route path="/category/:id" element={<Category/>}/>
           </Routes>
           </ShoppingCartProvider>
-        </BrowserRouter>
-        </DataProvider>
+          </DataProvider>
+        </BrowserRouter>  
       </div>
     </>
   );
