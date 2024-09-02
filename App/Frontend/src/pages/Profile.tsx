@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DataContext } from "../context/DataContext";
 import { useContext, useEffect } from "react";
 

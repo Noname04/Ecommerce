@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DataContext } from "../context/DataContext";

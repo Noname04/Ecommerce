@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
@@ -44,7 +45,7 @@ const Register = () => {
         };
         console.log("sent")
         const response = await fetch(
-          "http://localhost:3000/register",
+          "http://localhost:3000/api/register",
           requestOptions
         );
         

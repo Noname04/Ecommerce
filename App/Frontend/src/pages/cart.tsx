@@ -29,23 +29,26 @@ const Cart = () => {
     if (firstName && lastName && address && zipCode && city && cartItems){
       const requestOptions = {
         method: "POST",
+        credentials: "include" as RequestCredentials,
         headers: { "Content-Type": "application/json"},
         body: JSON.stringify({ firstName, lastName, address, zipCode,city,items:cartItems }),
       };
       const response = await fetch(
-        "http://localhost:3000/orders",
+        "http://localhost:3000/api/orders",
         requestOptions
       );
       const data = await response.json();
-        if (response.status !== 201) {
+        if (response.status === 403) {
           console.log(data);
           navigate("/login")
           localStorage.removeItem("token")
-        } else {
+        }else if(response.ok){
           navigate("/");
           localStorage.removeItem("shopping-cart")
           window.location.reload();
           //window.location.reload(false);
+        }else  {
+          console.log(data);
         }
     }
   };

@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import Dropmenu from "./Dropmenu";
 import { useShoppingCart } from "../context/ShoppingCartContext";

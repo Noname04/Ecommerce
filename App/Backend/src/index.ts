@@ -5,36 +5,65 @@ import jwt from "jsonwebtoken";
 import { request } from "http";
 import cors from "cors";
 import { getTokenFrom } from "../utils/token";
-import { authenticateJWT, RequestUser} from "../utils/authenticateJWT"
-import cookieParser from 'cookie-parser';
+import { authenticateJWT, RequestUser } from "../utils/authenticateJWT";
+import cookieParser from "cookie-parser";
+import helmet from 'helmet';
+import path from "path";
 
 dotenv.config();
 
 const app: Express = express();
+
+
+
+
+
 app.use(express.json());
 app.use(cookieParser());
 export const prisma = new PrismaClient();
 const port = process.env.PORT || 3000;
-
-{
-  /* cors */
+ /*
+{ 
+  cors 
 }
 
 const corsOptions = {
-
-  origin: 'http://localhost:5173',
-
+  origin: "http://localhost:5173",
 
   credentials: true,
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+*/
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
+{
+  /* Content security policy */
+}
+app.use(helmet.contentSecurityPolicy({
+  directives:{
+    defaultSrc:[ "'self'"],
+    scriptSrc:["'self'"],
+    styleSrc:["'self'"],
+    imgSrc:["'self'","https://m.media-amazon.com/"],
+    connectSrc:["'self'"],
+    fontSrc:["'self'","data:"],
+    objectSrc:["'self'"],
+    frameSrc:["'self'"],
+    reportUri: '/csp-violation-report-endpoint',
+  }
+}))
+app.use(express.static(path.join(__dirname, "dist")));
 
-app.post("/register", async (req: Request, res: Response) => {
+
+
+app.post('/api/csp-violation-report-endpoint',(req,res)=>{
+  console.log(`CSP Violation`, req.body);
+  res.status(204).end();
+})
+
+
+
+app.post("/api/register", async (req: Request, res: Response) => {
   const { email, phonenumber, username, password } = req.body;
 
   if (!email || !username || !password)
@@ -59,7 +88,7 @@ app.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/login", async (req: Request, res: Response) => {
+app.post("/api/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const checkData = await prisma.user.findFirst({
     where: { username, password },
@@ -74,7 +103,7 @@ app.post("/login", async (req: Request, res: Response) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    path: "http://localhost:5173/" ,
+    path: "http://localhost:5173/",
     secure: true,
     maxAge: 3600000,
   });
@@ -82,7 +111,7 @@ app.post("/login", async (req: Request, res: Response) => {
   res.json({ message: "logged in successfully" });
 });
 
-app.post("/category", async (req: Request, res: Response) => {
+app.post("/api/category", async (req: Request, res: Response) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).send("Empty name");
@@ -95,19 +124,24 @@ app.post("/category", async (req: Request, res: Response) => {
   res.json(category);
 });
 
-app.get("/category", async (req: Request, res: Response) => {
+app.get("/api/category", async (req: Request, res: Response) => {
   const categories = await prisma.category.findMany({});
   return res.status(200).json(categories);
 });
 
-app.get("/category/:categoryId", async (req: Request, res: Response) => {
-  const singleCategory = await prisma.category.findFirst({
-    where: { id: +req.params.categoryId },
-  });
-  return res.status(200).json(singleCategory);
+app.get("/api/category/:categoryId", async (req: Request, res: Response) => {
+  try {
+    parseInt(req.params.categoryId, 32);
+    const singleCategory = await prisma.category.findFirst({
+      where: { id: +req.params.categoryId },
+    });
+    return res.status(200).json(singleCategory);
+  } catch {
+    return res.status(400).json("an error has occured");
+  }
 });
 
-app.post("/items", async (req: Request, res: Response) => {
+app.post("/api/items", async (req: Request, res: Response) => {
   const { name, photo, price, amount, sold, description, category } = req.body;
   if (
     !name ||
@@ -142,14 +176,19 @@ app.post("/items", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/item/category/:categoryId", async (req: Request, res: Response) => {
-  const item = await prisma.item.findMany({
-    where: { categoryId: +req.params.categoryId },
-  });
-  return res.status(200).json(item);
+app.get("/api/item/category/:categoryId", async (req: Request, res: Response) => {
+  try {
+    parseInt(req.params.categoryId, 32);
+    const item = await prisma.item.findMany({
+      where: { categoryId: +req.params.categoryId },
+    });
+    return res.status(200).json(item);
+  } catch {
+    return res.status(400).json("an error has occured");
+  }
 });
 
-app.get("/recommended", async (req: Request, res: Response) => {
+app.get("/api/recommended", async (req: Request, res: Response) => {
   const recommended = await prisma.item.findMany({
     orderBy: { sold: "desc" },
     take: 10,
@@ -158,19 +197,28 @@ app.get("/recommended", async (req: Request, res: Response) => {
   return res.status(200).json(recommended);
 });
 
-app.get("/item/:id", async (req: Request, res: Response) => {
-  const item = await prisma.item.findFirst({
-    where: { id: +req.params.id },
-    include: { category: true },
-  });
-  return res.status(200).json(item);
+app.get("/api/item/:id", async (req: Request, res: Response) => {
+  try {
+    parseInt(req.params.id, 32);
+    const item = await prisma.item.findFirst({
+      where: { id: +req.params.id },
+      include: { category: true },
+    });
+    return res.status(200).json(item);
+  } catch {
+    return res.status(400).json("an error has occured");
+  }
 });
 
-{/* Protected routes */}
+{
+  /* Protected routes */
+}
 
-app.use(authenticateJWT)
 
-app.get("/profile", async (req: RequestUser, res: Response) => {
+
+app.use(authenticateJWT);
+
+app.get("/api/profile", async (req: RequestUser, res: Response) => {
   const userId = req.user.id;
 
   if (userId === null) {
@@ -206,7 +254,7 @@ app.get("/profile", async (req: RequestUser, res: Response) => {
   }
 });
 
-app.post("/orders", async (req: RequestUser, res: Response) => {
+app.post("/api/orders", async (req: RequestUser, res: Response) => {
   const { firstName, lastName, address, zipCode, city, items } = req.body as {
     firstName: string;
     lastName: string;
@@ -224,7 +272,6 @@ app.post("/orders", async (req: RequestUser, res: Response) => {
     !items ||
     items.length === 0
   ) {
-    console.log(req.body);
     return res.status(400).send("Cannot be empty");
   }
   const userId = req.user.id;
@@ -244,7 +291,6 @@ app.post("/orders", async (req: RequestUser, res: Response) => {
   }, 0);
 
   fullPrice = parseFloat(fullPrice.toFixed(2));
-  console.log(fullPrice);
 
   if (userId === null) {
     return res.status(403).json({
@@ -277,7 +323,11 @@ app.post("/orders", async (req: RequestUser, res: Response) => {
   }
 });
 
+app.get("*", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+

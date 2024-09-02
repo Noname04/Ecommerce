@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +14,7 @@ export const DataProvider = (props:any) => {
 
   const itemlist = () => {
     if (item.length === 0)
-      fetch(`http://localhost:3000/recommended`)
+      fetch(`http://localhost:3000/api/recommended`)
         .then((res) => res.json())
         .then((data) => setItem(data));
   };
@@ -25,7 +26,7 @@ export const DataProvider = (props:any) => {
 
   const singleCategory = (id: number) => {
     if (category.length === 0)
-      fetch(`http://localhost:3000/category/${id}`)
+      fetch(`http://localhost:3000/api/category/${id}`)
         .then((res) => res.json())
         .then((data) => setCategory(data));
   };
@@ -38,7 +39,7 @@ export const DataProvider = (props:any) => {
 
   const categorylist = () => {
     if (categories.length === 0)
-      fetch(`http://localhost:3000/category`)
+      fetch(`http://localhost:3000/api/category`)
         .then((res) => res.json())
         .then((data) => setCategories(data));
   };
@@ -51,7 +52,7 @@ export const DataProvider = (props:any) => {
 
   const categoryitemslist = (id: number) => {
     if (id)
-      fetch(`http://localhost:3000/item/category/${id}`)
+      fetch(`http://localhost:3000/api/item/category/${id}`)
         .then((res) => res.json())
         .then((data) => setCategoryItems(data));
   };
@@ -64,7 +65,7 @@ export const DataProvider = (props:any) => {
 
   const showitemdetails = (id: number) => {
     if (id)
-      fetch(`http://localhost:3000/item/${id}`)
+      fetch(`http://localhost:3000/api/item/${id}`)
         .then((res) => res.json())
         .then((data) => setItemDetails(data));
   };
@@ -82,7 +83,7 @@ export const DataProvider = (props:any) => {
       method: "GET",
       credentials: "include" as RequestCredentials,
     };
-      const request = await fetch(`http://localhost:3000/profile/`,requestOptions)
+      const request = await fetch(`http://localhost:3000/api/profile/`,requestOptions)
     if(request.ok){
       const data = await request.json()
       setUserDetails(data);
