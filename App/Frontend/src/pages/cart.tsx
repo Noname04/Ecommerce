@@ -34,12 +34,11 @@ const Cart = () => {
         body: JSON.stringify({ firstName, lastName, address, zipCode,city,items:cartItems }),
       };
       const response = await fetch(
-        "http://localhost:3000/api/orders",
+        "https://localhost:3000/api/orders",
         requestOptions
       );
       const data = await response.json();
         if (response.status === 403) {
-          console.log(data);
           navigate("/login")
           localStorage.removeItem("token")
         }else if(response.ok){

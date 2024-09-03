@@ -19,9 +19,6 @@ const Profile = () => {
             <h1>Email: {userDetails.email}</h1>
             <button
               className="border border-gray-900 bg-gray-600 p-2 my-4 text-white transition-all hover:bg-black rounded-full w-full"
-              onClick={() => {
-                console.log(userDetails);
-              }}
             >
               change password
             </button>

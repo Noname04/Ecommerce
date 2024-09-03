@@ -145,7 +145,7 @@ app.post("/api/register", async (req: Request, res: Response) => {
   const { email, phoneNumber, username, password } = req.body;
 
   if (!email || !username || !password) {
-    return res.status(400).send("Invalid data");
+    return res.status(400).json("Invalid data");
   }
   const usernameAvailability = await prisma.user.findFirst({
     where: { username },
@@ -153,10 +153,10 @@ app.post("/api/register", async (req: Request, res: Response) => {
   const EmailAvailability = await prisma.user.findFirst({ where: { email } });
 
   if (usernameAvailability) {
-    return res.status(400).send("username is taken");
+    return res.status(400).json("username is taken");
   }
   if (EmailAvailability) {
-    return res.status(400).send("Email is taken");
+    return res.status(400).json("Email is taken");
   }
 
   const passwordHash = await bcrypt.hash(password, saltRounds);
@@ -435,4 +435,5 @@ app.listen(port, () => {
 httpsServer.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+
 */

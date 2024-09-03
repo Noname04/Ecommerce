@@ -21,8 +21,7 @@ const Register = () => {
   */
 
   const emailRegex = new RegExp(
-    /^[A-Za-z0-9_!#$%&'*+/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
-    "gm"
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   );
 
   /*
@@ -45,18 +44,18 @@ const Register = () => {
         };
         console.log("sent")
         const response = await fetch(
-          "http://localhost:3000/api/register",
+          "https://localhost:3000/api/register",
           requestOptions
         );
         
         const data = await response.json();
-        if (response.status !== 201) {
-          setServerResponse(data.error);
-          console.log(data);
-        } else {
+        if (response.ok) {
           navigate("/login");
           window.location.reload();
-          //window.location.reload(false);
+
+        } else {
+          setServerResponse(data);
+          console.log(data);
         }
       }
     } catch (error) {
@@ -172,10 +171,6 @@ const Register = () => {
             Login
           </a>
         </p>
-        <div className="flex items-center justify-center mt-6 gap-3">
-          <input type="checkbox" name="" id="" />
-          <p>terms of use & privacy policy</p>
-        </div>
       </div>
     </section>
   );

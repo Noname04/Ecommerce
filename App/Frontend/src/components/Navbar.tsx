@@ -28,7 +28,6 @@ export const Navbar = () => {
         localStorage.removeItem('token')
         navigate("/")
         window.location.reload();
-        console.log("help");
       } else {
         console.log("error occurred");
       }
