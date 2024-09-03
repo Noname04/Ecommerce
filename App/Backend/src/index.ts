@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
@@ -7,22 +7,45 @@ import cors from "cors";
 import { getTokenFrom } from "../utils/token";
 import { authenticateJWT, RequestUser } from "../utils/authenticateJWT";
 import cookieParser from "cookie-parser";
-import helmet from 'helmet';
+import helmet from "helmet";
+import fs from "fs";
 import path from "path";
+import https from "https";
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 
+/*
+{Server settings}
+*/
+
+
+
+
+
 const app: Express = express();
 
+const privateKey = fs.readFileSync('ssl/localhost.key', 'utf8');
+const certificate = fs.readFileSync('ssl//localhost.crt', 'utf8');
 
+const credentials = { key: privateKey, cert: certificate };
 
+const httpsServer = https.createServer(credentials, app);
 
 
 app.use(express.json());
 app.use(cookieParser());
 export const prisma = new PrismaClient();
 const port = process.env.PORT || 3000;
- /*
+
+/*
+{ 
+password salt  
+}
+*/
+
+const saltRounds = 10;
+/*
 { 
   cors 
 }
@@ -36,64 +59,143 @@ const corsOptions = {
 app.use(cors(corsOptions));
 */
 
+/* 
 {
-  /* Content security policy */
+X-Content-Type-Options Header
 }
-app.use(helmet.contentSecurityPolicy({
-  directives:{
-    defaultSrc:[ "'self'"],
-    scriptSrc:["'self'"],
-    styleSrc:["'self'"],
-    imgSrc:["'self'","https://m.media-amazon.com/"],
-    connectSrc:["'self'"],
-    fontSrc:["'self'","data:"],
-    objectSrc:["'self'"],
-    frameSrc:["'self'"],
-    reportUri: '/csp-violation-report-endpoint',
-  }
-}))
+*/
+
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  next();
+});
+
+/* 
+{
+ hash timestamps
+}
+*/
+
+app.get("/timestamp", (req, res) => {
+  const currentTimestamp = new Date().toISOString();
+  res.json({ timestamp: currentTimestamp });
+});
+
+/* 
+{
+  Content security policy
+} 
+*/
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'","'unsafe-inline'"],
+      imgSrc: ["'self'", "https://m.media-amazon.com/"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'", "data:"],
+      frameAncestors: ["'none'"],   //clickJacking protection
+      formAction: ["'self'"],
+      objectSrc: ["'self'"],
+      frameSrc: ["'self'"],
+      //reportTo: '/csp-violation-report-endpoint',
+    },
+    reportOnly: false,
+  })
+);
 app.use(express.static(path.join(__dirname, "dist")));
 
-
-
+/*
 app.post('/api/csp-violation-report-endpoint',(req,res)=>{
   console.log(`CSP Violation`, req.body);
   res.status(204).end();
-})
+});
+*/
+
+/* 
+{ 
+disable server leak information
+} 
+*/
+app.disable("x-powered-by");
 
 
+/*
+{
+Potential meta data leak fix
+}
+*/
+
+const allowedHosts = ["localhost:3000"];
+
+const validateHost = (req: Request, res: Response, next: NextFunction) => {
+  const host = req.get("Host");
+
+  if (!host || !allowedHosts.includes(host)) {
+    res.status(403).send("Access denied");
+  } else {
+    next();
+  }
+};
+
+app.use(validateHost);
+
+
+
+
+
+/* 
+{
+requests
+} 
+*/
 
 app.post("/api/register", async (req: Request, res: Response) => {
-  const { email, phonenumber, username, password } = req.body;
-
-  if (!email || !username || !password)
+  const { email, phoneNumber, username, password } = req.body;
+  
+  if (!email || !username || !password){
     return res.status(400).send("Invalid data");
-
-  const userNameAvailability = await prisma.user.findFirst({
+  }
+  const usernameAvailability = await prisma.user.findFirst({
     where: { username },
   });
   const EmailAvailability = await prisma.user.findFirst({ where: { email } });
 
-  if (userNameAvailability) return res.status(400).send("Username is taken");
-  if (EmailAvailability) return res.status(400).send("Email is taken");
+  if (usernameAvailability) {
+    return res.status(400).send("username is taken");
+  };
+  if (EmailAvailability) {
+    return res.status(400).send("Email is taken");
+  };
+
+
+  const passwordHash = await bcrypt.hash(password, saltRounds);
 
   try {
     await prisma.user.create({
-      data: { email, phonenumber, username, password },
+      data: { email, phoneNumber, username, password: passwordHash, },
     });
 
     return res.status(201).json({ message: "user created" });
-  } catch {
+  } catch (error) {
     return res.status(400).json({ error: "invalid request" });
   }
 });
 
 app.post("/api/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
+  
   const checkData = await prisma.user.findFirst({
-    where: { username, password },
+    where: { username },
   });
+  
   if (!checkData) return res.status(400).json("Wrong username or password");
+  const passwordCorrect = await bcrypt.compare(password, checkData.password);
+
+  if (!passwordCorrect) return res.status(400).json("Wrong username or password");
+  
 
   const token = jwt.sign(
     { id: checkData.id, username: checkData.username },
@@ -103,7 +205,6 @@ app.post("/api/login", async (req: Request, res: Response) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    path: "http://localhost:5173/",
     secure: true,
     maxAge: 3600000,
   });
@@ -176,17 +277,20 @@ app.post("/api/items", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/api/item/category/:categoryId", async (req: Request, res: Response) => {
-  try {
-    parseInt(req.params.categoryId, 32);
-    const item = await prisma.item.findMany({
-      where: { categoryId: +req.params.categoryId },
-    });
-    return res.status(200).json(item);
-  } catch {
-    return res.status(400).json("an error has occured");
+app.get(
+  "/api/item/category/:categoryId",
+  async (req: Request, res: Response) => {
+    try {
+      parseInt(req.params.categoryId, 32);
+      const item = await prisma.item.findMany({
+        where: { categoryId: +req.params.categoryId },
+      });
+      return res.status(200).json(item);
+    } catch {
+      return res.status(400).json("an error has occured");
+    }
   }
-});
+);
 
 app.get("/api/recommended", async (req: Request, res: Response) => {
   const recommended = await prisma.item.findMany({
@@ -210,11 +314,22 @@ app.get("/api/item/:id", async (req: Request, res: Response) => {
   }
 });
 
+app.put("/api/logout", async(req: Request, res: Response) =>{
+
+  res.clearCookie('token',{
+    httpOnly: true,
+    secure: true,
+  });
+
+  return res.status(200).json({
+    msg: "Success",
+  });
+
+});
+
 {
   /* Protected routes */
 }
-
-
 
 app.use(authenticateJWT);
 
@@ -233,7 +348,7 @@ app.get("/api/profile", async (req: RequestUser, res: Response) => {
       select: {
         email: true,
         username: true,
-        phonenumber: true,
+        phoneNumber: true,
         orders: {
           select: {
             id: true,
@@ -326,8 +441,12 @@ app.post("/api/orders", async (req: RequestUser, res: Response) => {
 app.get("*", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
-
+/*
 app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`);
+  });
+
+*/
+httpsServer.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
-

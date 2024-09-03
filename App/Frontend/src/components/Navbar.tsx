@@ -3,17 +3,43 @@ import Dropmenu from "./Dropmenu";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 
 export const Navbar = () => {
-  {
-    /* cart context */
-  }
-
-  const { cartAmount } = useShoppingCart();
-
   const navigate = useNavigate();
   const routeChange = () => {
     const path = `/cart`;
     navigate(path);
   };
+
+  {
+    /* logout */
+  }
+
+  const handleSubmit = async () => {
+
+      const requestOptions = {
+        method: "PUT",
+        credentials: "include" as RequestCredentials,
+      };
+      const response = await fetch(
+        "https://localhost:3000/api/logout",
+        requestOptions
+      );
+
+      if (response.ok) {
+        localStorage.removeItem('token')
+        navigate("/")
+        window.location.reload();
+        console.log("help");
+      } else {
+        console.log("error occurred");
+      }
+
+  };
+
+  {
+    /* cart context */
+  }
+
+  const { cartAmount } = useShoppingCart();
 
   return (
     <div className="bg-white sticky top-0 dark:bg-gray-900 bg-gray-300 dark:text-white duration-200 z-40 flex py-4 px-2 justify-between items-center border-b-2 border-gray-500 dark:border-gray-300">
@@ -62,13 +88,17 @@ export const Navbar = () => {
             </>
           ) : (
             <>
-              <a href="/profile" >
+              <a href="/profile">
                 <li className="inline-block px-4 font-semibold text-black hover:text-black dark:hover:text-white duration-200 ">
                   My profile
                 </li>
               </a>
-              <a href="/" onClick={() => localStorage.removeItem("token")}>
-                <li className="inline-block px-4 font-semibold text-black hover:text-black dark:hover:text-white duration-200">
+              <a
+                onClick={() => {
+                  handleSubmit();
+                }}
+              >
+                <li className="inline-block hover:cursor-pointer px-4 font-semibold text-black hover:text-black dark:hover:text-white duration-200">
                   Logout
                 </li>
               </a>

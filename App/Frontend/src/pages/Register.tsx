@@ -45,7 +45,7 @@ const Register = () => {
         };
         console.log("sent")
         const response = await fetch(
-          "http://localhost:3000/api/register",
+          "https://localhost:3000/api/register",
           requestOptions
         );
         
@@ -80,7 +80,7 @@ const Register = () => {
             }}
           />
             {sent && !emailRegex.test(email) && email ? (
-            <Alert className="mb-4" severity="error">
+            <Alert className="mb-4 unsafe-inline" severity="error">
               {" "}
               Incorrect email.{" "}
             </Alert>
@@ -96,7 +96,7 @@ const Register = () => {
             }}
           />
            {infoUser && username.length < 6 ? (
-            <Alert className="mb-4" severity="info">
+            <Alert className="mb-4 unsafe-inline" severity="info">
               {" "}
               Username must have at least 6 characters.{" "}
             </Alert>
@@ -120,7 +120,7 @@ const Register = () => {
             }}
           />
             {infoPassword && password.length < 6 ? (
-            <Alert className="mb-4" severity="info">
+            <Alert className="mb-4 unsafe-inline" severity="info">
               {" "}
               Password must have at least 6 characters.{" "}
             </Alert>
@@ -134,7 +134,7 @@ const Register = () => {
             }}
           />
           {sent && password !== confirmPassword && password ? (
-            <Alert className="mb-4" severity="error">
+            <Alert className="mb-4 unsafe-inline" severity="error">
               {" "}
               Passwords don't match.{" "}
             </Alert>
@@ -152,13 +152,13 @@ const Register = () => {
           Continue
         </button>
         {sent && (!username || !email || !password || !confirmPassword) ? (
-          <Alert className="mb-4" severity="error">
+          <Alert className="mb-4 unsafe-inline" severity="error">
             {" "}
             No field can be empty.
           </Alert>
         ) : null}
         {sent && serverResponse ? (
-          <Alert className="mb-4" severity="error">
+          <Alert className="mb-4 unsafe-inline" severity="error">
             {" "}
             {serverResponse}
           </Alert>

@@ -6,6 +6,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -18,15 +19,14 @@ const Login = () => {
         body: JSON.stringify({ username, password }),
       };
       const response = await fetch(
-        "http://localhost:3000/api/login",
+        "https://localhost:3000/api/login",
         requestOptions
       );
-      
+      const data = await response.json();
       if (response.status !== 200) {
-        console.log(response.json())
+        setError(data);
       } else {
         const data = await response.json();
-        console.log("wysłano");
         console.log('Logged in successfully:', data.message); 
         localStorage.setItem("token", "true");
         navigate("/");
@@ -48,7 +48,7 @@ const Login = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
           {sent && !username ? (
-            <Alert className="mb-4" severity="error">
+            <Alert className="mb-4 unsafe-inline" severity="error">
               {" "}
               Username can't be empty.{" "}
             </Alert>
@@ -60,7 +60,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           {sent && !password ? (
-            <Alert className="mb-4" severity="error">
+            <Alert className="mb-4 unsafe-inline" severity="error">
               {" "}
               Password can't be empty.{" "}
             </Alert>
@@ -75,6 +75,12 @@ const Login = () => {
         >
           Continue
         </button>
+        {sent && username && password ?(
+            <Alert className="mb-4 unsafe-inline" severity="error">
+            {" "}
+            {error}.{" "}
+          </Alert>
+          ): null}
         <p className="text-black font-bold">
           Don't have an account?{" "}
           <a

@@ -16,7 +16,7 @@ datasource db {
 model User {
   id          Int      @id @default(autoincrement())
   email       String   @unique
-  phonenumber String?
+  phoneNumber String?
   username    String   @unique
   password    String
   orders      Orders[]
