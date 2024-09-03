@@ -1,52 +1,19 @@
-// @ts-nocheck
 import  { useContext, useEffect, useState } from "react";
 import { DataContext } from "../context/DataContext";
-/* 
-const MenuLinks = [
-  {
-    id: 1,
-    name: "category1",
-    link: "/category",
-  },
-  {
-    id: 2,
-    name: "category2",
-    link: "/category",
-  },
-  {
-    id: 3,
-    name: "category3",
-    link: "/category",
-  },
-  {
-    id: 4,
-    name: "category4",
-    link: "/category",
-  },
-  {
-    id: 5,
-    name: "category5",
-    link: "/category",
-  },
-  {
-    id: 6,
-    name: "category6",
-    link: "/category",
-  },
-];
-*/
-const Dropmenu = () => {
+
+
+const DropMenu = () => {
 
   {/* Database connect */}
 
   const {
     categories,
-    categorylist,
+    categoryList,
   } = useContext(DataContext);
 
   useEffect(() => {
-    categorylist();
-  }, []);
+    categoryList();
+  });
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -77,4 +44,4 @@ const Dropmenu = () => {
   );
 };
 
-export default Dropmenu;
+export default DropMenu;

@@ -1,64 +1,24 @@
-// @ts-nocheck
+
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
-import Image1 from "../assets/temporary/image1.png";
-import Image2 from "../assets/temporary/image2.png";
-import Image3 from "../assets/temporary/image3.png";
+
 import { DataContext } from "../context/DataContext";
 
-
-const SlideData = [
-  {
-    id: 1,
-    img: Image1,
-    subtitle: "Beats",
-    title: "Wireless",
-    title2: "Headphone",
-  },
-  {
-    id: 2,
-    img: Image2,
-    subtitle: "Apple",
-    title: "MacBook",
-    title2: "Pro",
-  },
-  {
-    id: 3,
-    img: Image3,
-    subtitle: "Nike",
-    title: "Air",
-    title2: "Sneakers",
-  },
-  {
-    id: 4,
-    img: Image1,
-    subtitle: "Sony",
-    title: "PlayStation",
-    title2: "Console",
-  },
-  {
-    id: 5,
-    img: Image3,
-    subtitle: "Samsung",
-    title: "Galaxy",
-    title2: "Smartphone",
-  },
-];
 
 const Homepage = () => {
 
     {/* Database context */}
     const {
-      itemlist,
-      item,
+      recommendedList,
+      recommended,
     } = useContext(DataContext);
   
     useEffect(() => {
-      itemlist();
-    }, []);
+      recommendedList();
+    });
   
-    //console.log(item);
+    console.log(recommended)
   {/* cart context */}
 
 
@@ -76,7 +36,7 @@ const Homepage = () => {
   };
 
   const navigate = useNavigate(); 
-  const routeChange = (id) =>{ 
+  const routeChange = (id: number) =>{ 
     const path = `/product/${id}`; 
     navigate(path);
   }
@@ -89,7 +49,7 @@ const Homepage = () => {
         <div className="container pb-8 sm:pb-0 ">
           {/* Main section */}
           <Slider {...settings}>
-            {item.map((data) => (
+            {recommended.map((data) => (
               <div key={data.id}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 py-2">
                   {/* text content */}
@@ -127,9 +87,9 @@ const Homepage = () => {
         </div>
       </div>
       {/* recommended products  */}
-      <h1 className="py-8 dark:text-white text-[38px] pl-4 font-semibold" onClick={()=> {console.log(item)}}>Recommended</h1>
+      <h1 className="py-8 dark:text-white text-[38px] pl-4 font-semibold" onClick={()=> {console.log(recommended)}}>Recommended</h1>
       <div className="grid lg:grid-cols-5 sm:grid-cols-1  gap-4 px-8">
-        {item.map((item) => (
+        {recommended.map((item) => (
           <div key={item.id}>
             <div className="rounded-sm border cursor-pointer dark:border-gray-700 py-auto px-auto hover:drop-shadow-[-8px_12px_6px_rgba(0,0,0,.4)] hover:scale-105 duration-300 bg-slate-100  dark:bg-slate-800"
             onClick={()=> {routeChange(item.id)}}

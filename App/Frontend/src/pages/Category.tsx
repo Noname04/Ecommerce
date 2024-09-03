@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
@@ -11,16 +11,18 @@ const Category = () => {
   const {
     category,
     singleCategory,
-    categoryitems,
+    categoryItems,
     categoryitemslist,
   } = useContext(DataContext);
 
+
   useEffect(() => {
+    if(id){
     categoryitemslist(id);
     singleCategory(id)
-  }, []);
+  }
+  });
 
-  console.log(category)
       {/* cart context */}
 
   const { id } = useParams();
@@ -28,18 +30,19 @@ const Category = () => {
     {/* go to item of ID */}
     
   const navigate = useNavigate(); 
-  const routeChange = (id) =>{ 
+  const routeChange = (id:string) =>{ 
     const path = `/product/${id}`; 
     navigate(path);
   }
 
 
   return (
+  <div>
+    {category !== null ? (
     <div className="container mx-auto py-4">
-      
       <h1 className="px-8 py-14 font-semibold text-5xl">{category.name}</h1>
       <div>
-        {categoryitems.map((data) => (
+        {categoryItems.map((data) => (
           <div className="bg-gray-200 flex flex-col my-8 border-b-2 cursor-pointer
           hover:drop-shadow-[-8px_12px_6px_rgba(0,0,0,.4)] hover:scale-105 duration-300"
           onClick={()=> {routeChange(data.id)}}
@@ -70,6 +73,8 @@ const Category = () => {
           </div>
         ))}
       </div>
+    </div>
+    ):(<div></div>)}
     </div>
   );
 };

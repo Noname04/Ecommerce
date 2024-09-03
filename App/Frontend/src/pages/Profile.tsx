@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { DataContext } from "../context/DataContext";
 import { useContext, useEffect } from "react";
 
@@ -7,11 +6,9 @@ const Profile = () => {
   { Database connect }
     */
   const { showUserDetails, userDetails } = useContext(DataContext);
-
   useEffect(() => {
     showUserDetails();
   }, [showUserDetails]);
-
   return (
     <div className="flex-col justify-center px-10 ">
       {/* user info */}
@@ -39,7 +36,7 @@ const Profile = () => {
 
       {/* user orders history */}
       {/* id Customer name items price date status */}
-        <h1 className="px-4 py-2 text-2xl font-semibold">Order history</h1>
+      <h1 className="px-4 py-2 text-2xl font-semibold">Order history</h1>
       <table className="min-w-full border-collapse border border-gray-300">
         <thead className="bg-gray-100">
           <tr>
@@ -65,33 +62,45 @@ const Profile = () => {
         </thead>
         <tbody>
           {userDetails !== null ? (
-            userDetails.orders.map((data) => (
-              <tr key={data.id} className="hover:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-2">{data.id}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {data.firstName} {data.lastName}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <ul className="list-disc list-inside">
-                    {data.items.map((item) => (
-                      <li key={item.item.id}>{item.item.name} x {item.amount}</li>
-                    ))}
-                  </ul>
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {data.fullPrice.toFixed(2)} USD
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {data.date}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {data.status}
+            userDetails?.orders !== null ? (
+              userDetails.orders.map((data) => (
+                <tr key={data.id} className="hover:bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2">
+                    {data.id}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {data.firstName} {data.lastName}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    <ul className="list-disc list-inside">
+                      {data.items.map((item) => (
+                        <li key={item.item.id}>
+                          {item.item.name} x {item.amount}
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {data.fullPrice.toFixed(2)} USD
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {data.date.toString()}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {data.status}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="text-center py-4">
+                  No orders found
                 </td>
               </tr>
-            ))
+            )
           ) : (
             <tr>
-              <td colSpan="6" className="text-center py-4">
+              <td colSpan={6} className="text-center py-4">
                 No orders found
               </td>
             </tr>

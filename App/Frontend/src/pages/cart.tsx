@@ -132,7 +132,7 @@ const Cart = () => {
                 {/* item details */}
                 <div className="flex max-h-[150px] items-center justify-between w-[450px]  border-b-2 bg-gray-200  ">
                   {/* item image */}
-                    <img src={data.photo} alt="" className="px-12  max-w-[200px] max-h-[100px]" />
+                    <img src={data.photo[0]} alt="" className="px-12  max-w-[200px] max-h-[100px]" />
 
                   {/* Product Name */}
                   <div className="   ">

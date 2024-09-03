@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Dropmenu from "./Dropmenu";
+import DropMenu from "./DropMenu";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 
 export const Navbar = () => {
@@ -42,12 +42,12 @@ export const Navbar = () => {
   const { cartAmount } = useShoppingCart();
 
   return (
-    <div className="bg-white sticky top-0 dark:bg-gray-900 bg-gray-300 dark:text-white duration-200 z-40 flex py-4 px-2 justify-between items-center border-b-2 border-gray-500 dark:border-gray-300">
+    <div className=" sticky top-0 dark:bg-gray-900 bg-gray-300 dark:text-white duration-200 z-40 flex py-4 px-2 justify-between items-center border-b-2 border-gray-500 dark:border-gray-300">
       {/* Drop Menu */}
       <div className="flex">
-        <Dropmenu />
+        <DropMenu />
 
-        {/* Logo and searchbar */}
+        {/* Logo and search bar */}
         <a
           href="/"
           className="font-semibold tracking-wides  text-2xl uppercase px-4 sm:text-3xl"

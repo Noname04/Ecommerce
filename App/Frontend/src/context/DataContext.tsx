@@ -1,34 +1,124 @@
-// @ts-nocheck
 import { useState, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const DataContext = createContext("");
+interface MyContextType {
+  recommended: {
+    id: number;
+    name: string;
+    photo: string[];
+    price: number;
+    amount: number;
+    sold: number;
+    description: string;
+    category: { description: string; id: number; name: string };
+    categoryId: number;
+  }[];
+  recommendedList: () => void;
+  categories: {
+    description: string;
+    name: string;
+    id: number;
+  }[];
+  categoryList: () => void;
+  categoryItems: {
+    id: string;
+    name: string;
+    photo: string[];
+    price: number;
+    amount: number;
+    sold: number;
+    description: string;
+    categoryId: number;
+  }[];
+  categoryitemslist: (id: string) => void;
+  itemDetails: {
+    id: number;
+    name: string;
+    photo: string[];
+    price: number;
+    amount: number;
+    sold: number;
+    description: string;
+    category: { description: string; id: number; name: string }| null;
+    categoryId: number;
+  } | null;
+  showItemDetails: (id: string) => void;
+  category: {
+    description: string;
+    name: string;
+    id: number;
+  } | null;
+  singleCategory: (id: string) => void;
+  showUserDetails: () => Promise<void>;
+  userDetails: {
+    email: string;
+    username: string;
+    phoneNumber?: string;
+    orders: {
+      date: Date;
+      firstName: string;
+      lastName: string;
+      fullPrice: number;
+      id: number;
+      status: string;
+      items: {
+        amount: number;
+        item: {
+          amount: number;
+          categoryId: number;
+          description: string;
+          id: number;
+          name: string;
+          photo: string[];
+          price: number;
+          sold: number;
+        };
+      }[];
+    }[];
+  } | null;
+}
 
-export const DataProvider = (props:any) => {
+export const DataContext = createContext<MyContextType>({
+  recommended: [],
+  recommendedList: () => {},
+  categories: [],
+  categoryList: () => {},
+  categoryItems: [],
+  categoryitemslist: () => {},
+  itemDetails: null,
+  showItemDetails: () => {},
+  category: null,
+  singleCategory: () => {},
+  showUserDetails: async () => {},
+  userDetails: null,
+});
+
+export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
-  
+
   {
     /* recommended items */
   }
-  const [item, setItem] = useState([]);
+  const [recommended, setRecommended] = useState([]);
 
-  const itemlist = () => {
-    if (item.length === 0)
+  const recommendedList = () => {
+    if (recommended.length === 0)
       fetch(`https://localhost:3000/api/recommended`)
         .then((res) => res.json())
-        .then((data) => setItem(data));
+        .then((data) => setRecommended(data));
   };
 
   {
     /* single category */
   }
-  const [category, setCategory] = useState([]);
+  const [category, setCategory] = useState(null);
 
-  const singleCategory = (id: number) => {
-    if (category.length === 0)
+  const singleCategory = (id: string) => {
+    if (id) {
       fetch(`https://localhost:3000/api/category/${id}`)
         .then((res) => res.json())
         .then((data) => setCategory(data));
+    }
   };
 
   {
@@ -37,7 +127,7 @@ export const DataProvider = (props:any) => {
 
   const [categories, setCategories] = useState([]);
 
-  const categorylist = () => {
+  const categoryList = () => {
     if (categories.length === 0)
       fetch(`https://localhost:3000/api/category`)
         .then((res) => res.json())
@@ -48,9 +138,9 @@ export const DataProvider = (props:any) => {
     /* items from category */
   }
 
-  const [categoryitems, setCategoryItems] = useState([]);
+  const [categoryItems, setCategoryItems] = useState([]);
 
-  const categoryitemslist = (id: number) => {
+  const categoryitemslist = (id: string) => {
     if (id)
       fetch(`https://localhost:3000/api/item/category/${id}`)
         .then((res) => res.json())
@@ -58,12 +148,12 @@ export const DataProvider = (props:any) => {
   };
 
   {
-    /* item deteails */
+    /* item details */
   }
 
-  const [itemdetails, setItemDetails] = useState(null);
+  const [itemDetails, setItemDetails] = useState(null);
 
-  const showitemdetails = (id: number) => {
+  const showItemDetails = (id: string) => {
     if (id)
       fetch(`https://localhost:3000/api/item/${id}`)
         .then((res) => res.json())
@@ -76,44 +166,42 @@ export const DataProvider = (props:any) => {
 
   const [userDetails, setUserDetails] = useState(null);
 
-  const showUserDetails = async() => {
-
-
+  const showUserDetails = async () => {
     const requestOptions = {
       method: "GET",
       credentials: "include" as RequestCredentials,
     };
-      const request = await fetch(`https://localhost:3000/api/profile/`,requestOptions)
-    if(request.ok){
-      const data = await request.json()
+    const request = await fetch(
+      `https://localhost:3000/api/profile/`,
+      requestOptions
+    );
+    if (request.ok) {
+      const data = await request.json();
       setUserDetails(data);
-    } else if(request.status=== 403){
-
-      navigate("/")
-      localStorage.removeItem("token")
-
+    } else if (request.status === 403) {
+      navigate("/");
+      localStorage.removeItem("token");
     }
   };
-
 
   return (
     <DataContext.Provider
       value={{
-        item,
-        itemlist,
+        recommended,
+        recommendedList,
         categories,
-        categorylist,
-        categoryitems,
+        categoryList,
+        categoryItems,
         categoryitemslist,
-        itemdetails,
-        showitemdetails,
+        itemDetails,
+        showItemDetails,
         category,
         singleCategory,
         showUserDetails,
         userDetails,
       }}
     >
-      {props.children}
+      {children}
     </DataContext.Provider>
   );
 };

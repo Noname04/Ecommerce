@@ -12,6 +12,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     if (username && password) {
+      try{
       const requestOptions = {
         method: "POST",
         credentials: "include" as RequestCredentials,
@@ -19,19 +20,21 @@ const Login = () => {
         body: JSON.stringify({ username, password }),
       };
       const response = await fetch(
-        "https://localhost:3000/api/login",
+        "http://localhost:3000/api/login",
         requestOptions
       );
       const data = await response.json();
       if (response.status !== 200) {
         setError(data);
       } else {
-        const data = await response.json();
         console.log('Logged in successfully:', data.message); 
         localStorage.setItem("token", "true");
         navigate("/");
         window.location.reload();
       }
+    } catch (error){
+      console.log(error);
+    }
     }
   };
   return (
@@ -75,7 +78,7 @@ const Login = () => {
         >
           Continue
         </button>
-        {sent && username && password ?(
+        {sent && username && password && error ?(
             <Alert className="mb-4 unsafe-inline" severity="error">
             {" "}
             {error}.{" "}

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
@@ -31,7 +30,8 @@ const Register = () => {
   */
 
   const handleSubmit = async () => {
-    if (username && email && password && phoneNumber && confirmPassword) {
+    if (username && email && password && confirmPassword) {
+      try{
       if (
         username.length >= 1 &&
         password.length >= 1 &&
@@ -45,7 +45,7 @@ const Register = () => {
         };
         console.log("sent")
         const response = await fetch(
-          "https://localhost:3000/api/register",
+          "http://localhost:3000/api/register",
           requestOptions
         );
         
@@ -59,6 +59,9 @@ const Register = () => {
           //window.location.reload(false);
         }
       }
+    } catch (error) {
+      console.log(error);
+    }
     }
   };
 

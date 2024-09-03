@@ -1,4 +1,4 @@
-// @ts-nocheck
+
 import { ReactNode, createContext, useContext} from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
@@ -10,14 +10,14 @@ type CartItem = {
   id: number;
   amount: number;
   name:string;
-  photo:string;
+  photo:string[];
   price:number;
 };
 
 type ShoppingCartContext = {
   
   getItemAmount: (id: number) => number;
-  increaseItemAmount: (itemdetails:CartItem) => void;
+  increaseItemAmount: (itemDetails:CartItem) => void;
   decreaseItemAmount: (id: number) => void;
   removeFromCart: (id: number) => void;
   cartAmount:number
@@ -26,6 +26,7 @@ type ShoppingCartContext = {
 
 const ShoppingCartContext = createContext({} as ShoppingCartContext);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useShoppingCart() {
   return useContext(ShoppingCartContext);
 }
@@ -40,8 +41,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     return cartItems.find((item) => item.id === id)?.amount || 0;
   }
 
-  function increaseItemAmount(itemdetails) {
-    const {id, name,photo,price} = itemdetails; 
+  function increaseItemAmount(itemDetails: { id: number; name: string; photo: string[]; price: number; }) {
+    const {id, name,photo,price} = itemDetails; 
     setCartItems((currItems) => {
       if (currItems.find((item) => item.id === id) == null) {
         return [...currItems, { id,name,photo,price, amount: 1 }];

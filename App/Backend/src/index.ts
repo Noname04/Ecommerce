@@ -11,7 +11,7 @@ import helmet from "helmet";
 import fs from "fs";
 import path from "path";
 import https from "https";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -19,19 +19,14 @@ dotenv.config();
 {Server settings}
 */
 
-
-
-
-
 const app: Express = express();
 
-const privateKey = fs.readFileSync('ssl/localhost.key', 'utf8');
-const certificate = fs.readFileSync('ssl//localhost.crt', 'utf8');
+const privateKey = fs.readFileSync("ssl/localhost.key", "utf8");
+const certificate = fs.readFileSync("ssl//localhost.crt", "utf8");
 
 const credentials = { key: privateKey, cert: certificate };
 
 const httpsServer = https.createServer(credentials, app);
-
 
 app.use(express.json());
 app.use(cookieParser());
@@ -49,7 +44,7 @@ const saltRounds = 10;
 { 
   cors 
 }
-
+*/
 const corsOptions = {
   origin: "http://localhost:5173",
 
@@ -57,7 +52,6 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-*/
 
 /* 
 {
@@ -92,11 +86,11 @@ app.use(
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
-      styleSrc: ["'self'","'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", "https://m.media-amazon.com/"],
       connectSrc: ["'self'"],
       fontSrc: ["'self'", "data:"],
-      frameAncestors: ["'none'"],   //clickJacking protection
+      frameAncestors: ["'none'"], //clickJacking protection
       formAction: ["'self'"],
       objectSrc: ["'self'"],
       frameSrc: ["'self'"],
@@ -121,7 +115,6 @@ disable server leak information
 */
 app.disable("x-powered-by");
 
-
 /*
 {
 Potential meta data leak fix
@@ -142,10 +135,6 @@ const validateHost = (req: Request, res: Response, next: NextFunction) => {
 
 app.use(validateHost);
 
-
-
-
-
 /* 
 {
 requests
@@ -154,8 +143,8 @@ requests
 
 app.post("/api/register", async (req: Request, res: Response) => {
   const { email, phoneNumber, username, password } = req.body;
-  
-  if (!email || !username || !password){
+
+  if (!email || !username || !password) {
     return res.status(400).send("Invalid data");
   }
   const usernameAvailability = await prisma.user.findFirst({
@@ -165,17 +154,16 @@ app.post("/api/register", async (req: Request, res: Response) => {
 
   if (usernameAvailability) {
     return res.status(400).send("username is taken");
-  };
+  }
   if (EmailAvailability) {
     return res.status(400).send("Email is taken");
-  };
-
+  }
 
   const passwordHash = await bcrypt.hash(password, saltRounds);
 
   try {
     await prisma.user.create({
-      data: { email, phoneNumber, username, password: passwordHash, },
+      data: { email, phoneNumber, username, password: passwordHash },
     });
 
     return res.status(201).json({ message: "user created" });
@@ -186,16 +174,16 @@ app.post("/api/register", async (req: Request, res: Response) => {
 
 app.post("/api/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
-  
+
   const checkData = await prisma.user.findFirst({
     where: { username },
   });
-  
+
   if (!checkData) return res.status(400).json("Wrong username or password");
   const passwordCorrect = await bcrypt.compare(password, checkData.password);
 
-  if (!passwordCorrect) return res.status(400).json("Wrong username or password");
-  
+  if (!passwordCorrect)
+    return res.status(400).json("Wrong username or password");
 
   const token = jwt.sign(
     { id: checkData.id, username: checkData.username },
@@ -238,7 +226,7 @@ app.get("/api/category/:categoryId", async (req: Request, res: Response) => {
     });
     return res.status(200).json(singleCategory);
   } catch {
-    return res.status(400).json("an error has occured");
+    return res.status(400).json("an error has occurred");
   }
 });
 
@@ -277,8 +265,7 @@ app.post("/api/items", async (req: Request, res: Response) => {
   }
 });
 
-app.get(
-  "/api/item/category/:categoryId",
+app.get("/api/item/category/:categoryId",
   async (req: Request, res: Response) => {
     try {
       parseInt(req.params.categoryId, 32);
@@ -287,7 +274,7 @@ app.get(
       });
       return res.status(200).json(item);
     } catch {
-      return res.status(400).json("an error has occured");
+      return res.status(400).json("an error has occurred");
     }
   }
 );
@@ -310,13 +297,12 @@ app.get("/api/item/:id", async (req: Request, res: Response) => {
     });
     return res.status(200).json(item);
   } catch {
-    return res.status(400).json("an error has occured");
+    return res.status(400).json("an error has occurred");
   }
 });
 
-app.put("/api/logout", async(req: Request, res: Response) =>{
-
-  res.clearCookie('token',{
+app.put("/api/logout", async (req: Request, res: Response) => {
+  res.clearCookie("token", {
     httpOnly: true,
     secure: true,
   });
@@ -324,7 +310,6 @@ app.put("/api/logout", async(req: Request, res: Response) =>{
   return res.status(200).json({
     msg: "Success",
   });
-
 });
 
 {
@@ -441,12 +426,13 @@ app.post("/api/orders", async (req: RequestUser, res: Response) => {
 app.get("*", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
-/*
-app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`);
-  });
 
-*/
+app.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`);
+});
+
+/*
 httpsServer.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+*/
