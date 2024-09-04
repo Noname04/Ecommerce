@@ -44,7 +44,7 @@ const saltRounds = 10;
 { 
   cors 
 }
-*/
+
 const corsOptions = {
   origin: "http://localhost:5173",
 
@@ -52,7 +52,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
+*/
 /* 
 {
 X-Content-Type-Options Header
@@ -99,7 +99,6 @@ app.use(
     reportOnly: false,
   })
 );
-app.use(express.static(path.join(__dirname, "dist")));
 
 /*
 app.post('/api/csp-violation-report-endpoint',(req,res)=>{
@@ -107,6 +106,41 @@ app.post('/api/csp-violation-report-endpoint',(req,res)=>{
   res.status(204).end();
 });
 */
+
+/* 
+{
+  HSTS
+}
+*/
+
+app.use(
+  helmet.hsts({
+    maxAge: 31536000, // 1 rok w sekundach
+    includeSubDomains: true, // Upewnia się, że subdomeny również wymuszają HTTPS
+    preload: true, // Opcjonalnie, aby dodać domenę do listy preload HSTS
+  })
+);
+
+
+app.use(express.static(path.join(__dirname, "dist")));
+
+
+
+/*
+{
+  cache control directives
+}
+*/
+
+app.use((req, res, next) => {
+  res.setHeader(
+    'Cache-Control',
+    'no-cache, no-store, must-revalidate'
+  );
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
 
 /* 
 { 
@@ -179,7 +213,8 @@ app.post("/api/login", async (req: Request, res: Response) => {
     where: { username },
   });
 
-  if (!checkData) return res.status(400).json("Wrong username or password");
+  if (!checkData || !password) return res.status(400).json("Wrong username or password");
+
   const passwordCorrect = await bcrypt.compare(password, checkData.password);
 
   if (!passwordCorrect)
@@ -426,14 +461,13 @@ app.post("/api/orders", async (req: RequestUser, res: Response) => {
 app.get("*", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
-
+/*
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+*/
 
-/*
 httpsServer.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 
-*/
