@@ -21,7 +21,6 @@ const Cart = () => {
   {
     /* Database connect */
   }
-
   {
     /* sent order */
   }

@@ -16,7 +16,7 @@ const Homepage = () => {
   
     useEffect(() => {
       recommendedList();
-    });
+    },[recommendedList]);
   
   {/* cart context */}
 

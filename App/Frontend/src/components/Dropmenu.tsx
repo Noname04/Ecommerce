@@ -13,7 +13,7 @@ const DropMenu = () => {
 
   useEffect(() => {
     categoryList();
-  });
+  },[categoryList]);
 
 
   const [isOpen, setIsOpen] = useState(false);

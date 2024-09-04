@@ -7,14 +7,17 @@ const Product = () => {
   {
     /* Database connect */
   }
+
+  const { id } = useParams();
+  
   const { itemDetails, showItemDetails } = useContext(DataContext);
-  console.log(itemDetails)
   useEffect(() => {
     if(id)
     showItemDetails(id);
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[id]);
 
-  const { id } = useParams();
+
 
 
   {
