@@ -12,6 +12,8 @@ import fs from "fs";
 import path from "path";
 import https from "https";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
+import { Console } from "console";
 
 dotenv.config();
 
@@ -77,6 +79,17 @@ app.get("/timestamp", (req, res) => {
 
 /* 
 {
+  generate nonce
+} 
+*/
+
+app.use((req, res, next) => {
+  res.locals.nonce = crypto.randomBytes(16).toString("base64");
+  next();
+});
+
+/* 
+{
   Content security policy
 } 
 */
@@ -85,8 +98,20 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: [
+        "'self'",
+        (req, res) => {
+          const expressRes = res as express.Response; // Rzutowanie na typ Express.Response
+          return `'nonce-${expressRes.locals.nonce}'`;
+        },
+      ],
+      styleSrc: [
+        "'self'",
+        (req, res) => {
+          const expressRes = res as express.Response; // Rzutowanie na typ Express.Response
+          return `'nonce-${expressRes.locals.nonce}'`;
+        },
+      ],
       imgSrc: ["'self'", "https://m.media-amazon.com/"],
       connectSrc: ["'self'"],
       fontSrc: ["'self'", "data:"],
@@ -121,10 +146,7 @@ app.use(
   })
 );
 
-
 app.use(express.static(path.join(__dirname, "dist")));
-
-
 
 /*
 {
@@ -133,12 +155,9 @@ app.use(express.static(path.join(__dirname, "dist")));
 */
 
 app.use((req, res, next) => {
-  res.setHeader(
-    'Cache-Control',
-    'no-cache, no-store, must-revalidate'
-  );
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
   next();
 });
 
@@ -168,6 +187,8 @@ const validateHost = (req: Request, res: Response, next: NextFunction) => {
 };
 
 app.use(validateHost);
+
+
 
 /* 
 {
@@ -213,7 +234,8 @@ app.post("/api/login", async (req: Request, res: Response) => {
     where: { username },
   });
 
-  if (!checkData || !password) return res.status(400).json("Wrong username or password");
+  if (!checkData || !password)
+    return res.status(400).json("Wrong username or password");
 
   const passwordCorrect = await bcrypt.compare(password, checkData.password);
 
@@ -300,7 +322,8 @@ app.post("/api/items", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/api/item/category/:categoryId",
+app.get(
+  "/api/item/category/:categoryId",
   async (req: Request, res: Response) => {
     try {
       parseInt(req.params.categoryId, 32);
@@ -457,9 +480,47 @@ app.post("/api/orders", async (req: RequestUser, res: Response) => {
     return res.status(400).json({ error: "invalid request" });
   }
 });
+/**
+app.get("*", (req, res) => {
+  const nonce = res.locals.nonce;
+  res.send(
+    `
+    <!doctype html>
+    <html lang="en" class="">
+    <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" http-equiv="Content-Security-Policy" content=" style-src 'self' 'nonce-${nonce}'; script-src 'self' 'nonce-${nonce}';"  />
+    <title>Shop</title>
+    <script type="module" crossorigin src="/assets/index-BcNv_1ug.js"> window.__nonce = "${nonce}";</script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CNpdqj83.css">
+    </head>
+    <body class="dark:bg-gradient-to-r
+    dark:from-gray-900 dark:to-gray-800">
+    <div id="root"></div>
+
+    </body>
+    </html>
+
+  `
+  );
+});
+ */
 
 app.get("*", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  const indexPath = path.join(__dirname, "dist", "index.html");
+
+  fs.readFile(indexPath, 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).send('Error loading index.html');
+    }
+
+    const modifiedHtml = data.replace(
+      '<meta property="csp-nonce" content="">',
+      `<meta property="csp-nonce" content="${res.locals.nonce}" />`
+    );
+    res.send(modifiedHtml);
+  });
 });
 /*
 app.listen(port, () => {
@@ -467,7 +528,8 @@ app.listen(port, () => {
 });
 */
 
+
+
 httpsServer.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
-

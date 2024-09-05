@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -10,34 +13,45 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  /* get nonce */
+  const nonce = document
+    .querySelector('meta[property="csp-nonce"]')
+    ?.getAttribute("content");
+
+  const cache = createCache({
+    key: "mui",
+    nonce: nonce!,
+  });
+
   const handleSubmit = async () => {
     if (username && password) {
-      try{
-      const requestOptions = {
-        method: "POST",
-        credentials: "include" as RequestCredentials,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      };
-      const response = await fetch(
-        "https://localhost:3000/api/login",
-        requestOptions
-      );
-      const data = await response.json();
-      if (response.status !== 200) {
-        setError(data);
-      } else {
-        console.log('Logged in successfully:', data.message); 
-        localStorage.setItem("token", "true");
-        navigate("/");
-        window.location.reload();
+      try {
+        const requestOptions = {
+          method: "POST",
+          credentials: "include" as RequestCredentials,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        };
+        const response = await fetch(
+          "https://localhost:3000/api/login",
+          requestOptions
+        );
+        const data = await response.json();
+        if (response.status !== 200) {
+          setError(data);
+        } else {
+          console.log("Logged in successfully:", data.message);
+          localStorage.setItem("token", "true");
+          navigate("/");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error){
-      console.log(error);
-    }
     }
   };
   return (
+    <CacheProvider value={cache}>
     <section className="mx-auto max-w-[1440px] px-6 lg:px-20 3xl:px-0 flex items-center justify-center flex-col pt-32">
       <div className="max-w-[555px] h-auto bg-slate-500 m-auto px-14 py-10 rounded-md">
         <h3 className="text-[48px] leading-tight md:text-[50px] md:leading-[1.3] mb-8 font-bold">
@@ -78,12 +92,12 @@ const Login = () => {
         >
           Continue
         </button>
-        {sent && username && password && error ?(
-            <Alert className="mb-4 unsafe-inline" severity="error">
+        {sent && username && password && error ? (
+          <Alert className="mb-4 unsafe-inline" severity="error">
             {" "}
             {error}.{" "}
           </Alert>
-          ): null}
+        ) : null}
         <p className="text-black font-bold">
           Don't have an account?{" "}
           <a
@@ -95,6 +109,7 @@ const Login = () => {
         </p>
       </div>
     </section>
+    </CacheProvider>
   );
 };
 
