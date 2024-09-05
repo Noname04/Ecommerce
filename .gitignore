@@ -6,6 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+weiiszablon.aux
 
 node_modules
 dist
@@ -27,3 +28,14 @@ dist-ssr
 
 /App/Backend/import
 /App/Backend/ssl
+/figures
+/auxiliary
+weiiszablon.toc
+weiiszablon.tex
+weiiszablon.synctex.gz
+weiiszablon.sty
+weiiszablon.pdf
+weiiszablon.log
+weiiszablon.fls
+weiiszablon.fdb_latexmk
+weiiszablon.aux
