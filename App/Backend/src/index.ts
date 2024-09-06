@@ -532,25 +532,34 @@ app.post("/api/orders", async (req: RequestUser, res: Response) => {
 app.post("/api/comment", async (req: RequestUser, res: Response) => {
   const { itemId, text } = req.body;
 
-  const userId = await getTokenFrom(req);
+  const userId = req.user.id;
 
+  const parsedItemId = parseInt(itemId, 10);
+
+  if (isNaN(parsedItemId)) {
+    return res.status(400).json({
+      error: "Invalid item ID",
+    });
+  }
+  
   if (!userId) {
     return res.status(401).json({
       error: "invalid user token",
     });
   }
-
+  
   try {
-    await prisma.comment.create({
+    const comment = await prisma.comment.create({
       data: {
         text,
         user: { connect: { id: userId } },
-        item: { connect: { id: itemId } },
+        item: { connect: { id: parsedItemId } },
       },
     });
 
-    return res.status(201).json({ message: "comment saved" });
-  } catch {
+    res.status(201).json(comment);
+  }catch (error) {
+    console.error("Error occurred while creating comment:", error);
     return res.status(400).json({ error: "invalid request" });
   }
 });
