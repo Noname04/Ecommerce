@@ -31,6 +31,11 @@ interface MyContextType {
     categoryId: number;
   }[];
   categoryitemslist: (id: string) => void;
+  searchItem: {
+    id: number;
+    name: string;
+  }[];
+  handleSearch: (searchValue: string) => void;
   itemDetails: {
     id: number;
     name: string;
@@ -39,8 +44,14 @@ interface MyContextType {
     amount: number;
     sold: number;
     description: string;
-    category: { description: string; id: number; name: string }| null;
+    category: { description: string; id: number; name: string } | null;
     categoryId: number;
+    comment: {
+      id: number;
+      text: string;
+      added: string;
+      user: { username: string };
+    }[];
   } | null;
   showItemDetails: (id: string) => void;
   category: {
@@ -85,6 +96,8 @@ export const DataContext = createContext<MyContextType>({
   categoryList: () => {},
   categoryItems: [],
   categoryitemslist: () => {},
+  searchItem: [],
+  handleSearch: () => {},
   itemDetails: null,
   showItemDetails: () => {},
   category: null,
@@ -119,6 +132,22 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         .then((res) => res.json())
         .then((data) => setCategory(data));
     }
+  };
+
+  {
+    /* search */
+  }
+  const [searchItem, setSearchItem] = useState([]);
+
+  const handleSearch = (searchValue: string) => {
+    fetch(`https://localhost:3000/api/search?search=${searchValue}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch search results");
+        }
+        return res.json();
+      })
+      .then((data) => setSearchItem(data));
   };
 
   {
@@ -193,6 +222,8 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         categoryList,
         categoryItems,
         categoryitemslist,
+        searchItem,
+        handleSearch,
         itemDetails,
         showItemDetails,
         category,

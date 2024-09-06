@@ -20,7 +20,7 @@ const DropMenu = () => {
   return (
     <div className="relative flex flex-col items-center rounded-lg">
       <button
-        className=" bg- rounded-full px-4 py-2 font-bold text-lg bg-gray-300 active:text-white active:border-2 active:border-black "
+        className=" rounded-full px-4 py-2 font-bold text-lg bg-gray-400 active:text-white active:border-2 active:border-black "
         onClick={() => setIsOpen((prev) => !prev)}
       >
         Menu

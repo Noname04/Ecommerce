@@ -64,7 +64,7 @@ const Homepage = () => {
                     </h1>
                     <div className="">
                       <button
-                        className='bg-red-500 text-white cursor-pointer hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10'
+                        className='bg-red-500 text-white hover:scale-105 duration-300 py-2 px-8 rounded-full relative z-10'
                         onClick={()=> {routeChange(data.id)}}
                       >Check out</button>
                     </div>

@@ -13,7 +13,9 @@ import path from "path";
 import https from "https";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import { Console } from "console";
+import { Console, error } from "console";
+
+
 
 dotenv.config();
 
@@ -140,9 +142,9 @@ app.post('/api/csp-violation-report-endpoint',(req,res)=>{
 
 app.use(
   helmet.hsts({
-    maxAge: 31536000, // 1 rok w sekundach
-    includeSubDomains: true, // Upewnia się, że subdomeny również wymuszają HTTPS
-    preload: true, // Opcjonalnie, aby dodać domenę do listy preload HSTS
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true,
   })
 );
 
@@ -187,8 +189,6 @@ const validateHost = (req: Request, res: Response, next: NextFunction) => {
 };
 
 app.use(validateHost);
-
-
 
 /* 
 {
@@ -275,6 +275,44 @@ app.get("/api/category", async (req: Request, res: Response) => {
   return res.status(200).json(categories);
 });
 
+app.get("/api/search", async (req: Request, res: Response) => {
+  const { search } = req.query;
+
+  if (typeof search !== "string") {
+    return res.status(400).json({ error: "Invalid search query" });
+  }
+
+  const sanitizedSearch = search.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+  try {
+    const shows = await prisma.item.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: sanitizedSearch,
+              mode: "insensitive",
+            },
+          },
+          {
+            category: {
+              name: {
+                contains: sanitizedSearch,
+                mode: "insensitive",
+              },
+            },
+          },
+        ],
+      },
+      select: { id: true, name: true },
+      take: 5,
+    });
+
+    return res.status(200).json(shows);
+  } catch (error) {
+    return res.status(500).json({ error: " iternal server error" });
+  }
+});
+
 app.get("/api/category/:categoryId", async (req: Request, res: Response) => {
   try {
     parseInt(req.params.categoryId, 32);
@@ -351,7 +389,17 @@ app.get("/api/item/:id", async (req: Request, res: Response) => {
     parseInt(req.params.id, 32);
     const item = await prisma.item.findFirst({
       where: { id: +req.params.id },
-      include: { category: true },
+      include: {
+        category: true,
+        comment: {
+          select: {
+            id: true,
+            text: true,
+            added: true,
+            user: { select: { username: true } },
+          },
+        },
+      },
     });
     return res.status(200).json(item);
   } catch {
@@ -480,6 +528,32 @@ app.post("/api/orders", async (req: RequestUser, res: Response) => {
     return res.status(400).json({ error: "invalid request" });
   }
 });
+
+app.post("/api/comment", async (req: RequestUser, res: Response) => {
+  const { itemId, text } = req.body;
+
+  const userId = await getTokenFrom(req);
+
+  if (!userId) {
+    return res.status(401).json({
+      error: "invalid user token",
+    });
+  }
+
+  try {
+    await prisma.comment.create({
+      data: {
+        text,
+        user: { connect: { id: userId } },
+        item: { connect: { id: itemId } },
+      },
+    });
+
+    return res.status(201).json({ message: "comment saved" });
+  } catch {
+    return res.status(400).json({ error: "invalid request" });
+  }
+});
 /**
 app.get("*", (req, res) => {
   const nonce = res.locals.nonce;
@@ -510,9 +584,9 @@ app.get("*", (req, res) => {
 app.get("*", (req: Request, res: Response) => {
   const indexPath = path.join(__dirname, "dist", "index.html");
 
-  fs.readFile(indexPath, 'utf8', (err, data) => {
+  fs.readFile(indexPath, "utf8", (err, data) => {
     if (err) {
-      return res.status(500).send('Error loading index.html');
+      return res.status(500).send("Error loading index.html");
     }
 
     const modifiedHtml = data.replace(
@@ -527,8 +601,6 @@ app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
 */
-
-
 
 httpsServer.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
