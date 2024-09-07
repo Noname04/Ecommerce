@@ -23,13 +23,18 @@ const Login = () => {
     nonce: nonce!,
   });
 
+
   const handleSubmit = async () => {
+    const csrfToken = await fetch('/api/csrf-token').then(res => res.json());
+
     if (username && password) {
       try {
         const requestOptions = {
           method: "POST",
           credentials: "include" as RequestCredentials,
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json",
+            'X-CSRF-Token': csrfToken.csrfToken, 
+          },
           body: JSON.stringify({ username, password }),
         };
         const response = await fetch(

@@ -23,10 +23,15 @@ export const Navbar = () => {
     /* logout */
   }
 
+
   const handleSubmit = async () => {
+    const csrfToken = await fetch('/api/csrf-token').then(res => res.json());
+
     const requestOptions = {
       method: "PUT",
       credentials: "include" as RequestCredentials,
+      headers: { 'X-CSRF-Token': csrfToken.csrfToken, 
+      },
     };
     const response = await fetch(
       "https://localhost:3000/api/logout",

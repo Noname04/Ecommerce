@@ -43,7 +43,7 @@ const Homepage = () => {
   return (
     
     <div className="container mx-auto py-4">
-     
+      <script src="https://example.com/blocked-script.js"></script>
       <div className="overflow-hidden rounded-3xl min-h-[550px] sm:min-h-[650px] slider-bg-color flex items-center justify-center border dark:border-gray-900">
         <div className="container pb-8 sm:pb-0 ">
           {/* Main section */}

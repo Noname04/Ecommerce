@@ -41,7 +41,10 @@ const Register = () => {
     Sent data to backend 
   */
 
-  const handleSubmit = async () => {
+
+  const handleSubmit = async () => { 
+    const csrfToken = await fetch('/api/csrf-token').then(res => res.json());
+
     if (username && email && password && confirmPassword) {
       try {
         if (
@@ -52,7 +55,8 @@ const Register = () => {
         ) {
           const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json",
+               'X-CSRF-Token': csrfToken.csrfToken },
             body: JSON.stringify({ username, email, password, phoneNumber }),
           };
           console.log("sent");

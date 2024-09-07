@@ -38,7 +38,11 @@ const Cart = () => {
   {
     /* sent order */
   }
+
+
   const handleSubmit = async () => {
+    const csrfToken = await fetch('/api/csrf-token').then(res => res.json());
+
     if (firstName && lastName && address && zipCode && city && cartItems) {
       if (!/^\d{5}$/.test(zipCode)) {
         setError("Invalid zip code. It should contain 5 digits.");
@@ -48,7 +52,8 @@ const Cart = () => {
       const requestOptions = {
         method: "POST",
         credentials: "include" as RequestCredentials,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          'CSRF-Token': csrfToken.csrfToken,  },
         body: JSON.stringify({
           firstName,
           lastName,

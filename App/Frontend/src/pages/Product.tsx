@@ -3,6 +3,7 @@ import { DataContext } from "../context/DataContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 
+
 const Product = () => {
   {
     /* Database connect */
@@ -14,7 +15,9 @@ const Product = () => {
   useEffect(() => {
     if (id) showItemDetails(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id,itemDetails]);
+  }, [id]);
+
+  
 
   {
     /* cart context */
@@ -32,14 +35,20 @@ const Product = () => {
 
   const [commentText, setCommentText] = useState("");
 
+
+  
+
   const handleCommentSubmit = async () => {
+    const csrfToken = await fetch('/api/csrf-token').then(res => res.json());
     if (commentText && id) {
-      console.log("działa1");
      
         const requestOptions = {
           method: "POST",
           credentials: "include" as RequestCredentials,
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json",
+            'X-CSRF-Token': csrfToken.csrfToken,
+           },
+          
           body: JSON.stringify({ text: commentText, itemId: id }),
         };
         const response = await fetch(
@@ -51,7 +60,7 @@ const Product = () => {
           navigate("/login");
           localStorage.removeItem("token");
         } else if (response.ok) {
-          
+          console.log("succes")
           //window.location.reload(false);
         } else {
           console.log(data);

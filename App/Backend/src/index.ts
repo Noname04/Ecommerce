@@ -14,6 +14,8 @@ import https from "https";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { Console, error } from "console";
+import csurf from 'csurf';
+
 
 
 
@@ -36,6 +38,20 @@ app.use(express.json());
 app.use(cookieParser());
 export const prisma = new PrismaClient();
 const port = process.env.PORT || 3000;
+
+/* 
+{
+Validation
+} 
+*/
+
+const {validateCommentBody,
+  validateLoginBody,
+  validateRegisterBody,
+  validateOrderBody,} =  require( "../utils/validation");
+
+const { validationResult } = require('express-validator');
+
 
 /*
 { 
@@ -103,14 +119,14 @@ app.use(
       scriptSrc: [
         "'self'",
         (req, res) => {
-          const expressRes = res as express.Response; // Rzutowanie na typ Express.Response
+          const expressRes = res as express.Response;
           return `'nonce-${expressRes.locals.nonce}'`;
         },
       ],
       styleSrc: [
         "'self'",
         (req, res) => {
-          const expressRes = res as express.Response; // Rzutowanie na typ Express.Response
+          const expressRes = res as express.Response;
           return `'nonce-${expressRes.locals.nonce}'`;
         },
       ],
@@ -119,7 +135,7 @@ app.use(
       fontSrc: ["'self'", "data:"],
       frameAncestors: ["'none'"], //clickJacking protection
       formAction: ["'self'"],
-      objectSrc: ["'self'"],
+      objectSrc: ["'none'"],
       frameSrc: ["'self'"],
       //reportTo: '/csp-violation-report-endpoint',
     },
@@ -133,6 +149,29 @@ app.post('/api/csp-violation-report-endpoint',(req,res)=>{
   res.status(204).end();
 });
 */
+
+/*
+{
+   CSRF token
+}  
+*/
+
+
+const csrfProtection = csurf({
+  cookie: {
+    httpOnly: true,
+    secure: true, 
+    sameSite: 'lax', 
+  },
+});
+
+app.use(csrfProtection);
+
+
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'DENY');
+  next();
+});
 
 /* 
 {
@@ -196,7 +235,11 @@ requests
 } 
 */
 
-app.post("/api/register", async (req: Request, res: Response) => {
+app.get('/api/csrf-token', (req, res) => {
+  return res.json({ csrfToken: req.csrfToken() });
+});
+
+app.post("/api/register",csrfProtection, validateRegisterBody, async (req: Request, res: Response) => {
   const { email, phoneNumber, username, password } = req.body;
 
   if (!email || !username || !password) {
@@ -227,8 +270,17 @@ app.post("/api/register", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/api/login", async (req: Request, res: Response) => {
+app.post("/api/login",csrfProtection, validateLoginBody, async (req: Request, res: Response) => {
   const { username, password } = req.body;
+
+
+  /*
+    const query = `SELECT * FROM public."User" WHERE username = '${username}' AND password = '${password}'`;
+  const checkData = await prisma.$queryRawUnsafe(query) as Array<any>;
+
+  if (!checkData || !password)
+    return res.status(400).json("Wrong username or password")
+  */
 
   const checkData = await prisma.user.findFirst({
     where: { username },
@@ -252,12 +304,13 @@ app.post("/api/login", async (req: Request, res: Response) => {
     httpOnly: true,
     secure: true,
     maxAge: 3600000,
+    sameSite: 'lax',
   });
 
   res.json({ message: "logged in successfully" });
 });
 
-app.post("/api/category", async (req: Request, res: Response) => {
+app.post("/api/category",csrfProtection, async (req: Request, res: Response) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).send("Empty name");
@@ -407,7 +460,7 @@ app.get("/api/item/:id", async (req: Request, res: Response) => {
   }
 });
 
-app.put("/api/logout", async (req: Request, res: Response) => {
+app.put("/api/logout",csrfProtection, async (req: Request, res: Response) => {
   res.clearCookie("token", {
     httpOnly: true,
     secure: true,
@@ -460,7 +513,7 @@ app.get("/api/profile", async (req: RequestUser, res: Response) => {
   }
 });
 
-app.post("/api/orders", async (req: RequestUser, res: Response) => {
+app.post("/api/orders", csrfProtection,validateOrderBody, async (req: RequestUser, res: Response) => {
   const { firstName, lastName, address, zipCode, city, items } = req.body as {
     firstName: string;
     lastName: string;
@@ -523,14 +576,21 @@ app.post("/api/orders", async (req: RequestUser, res: Response) => {
         user: { connect: { id: userId } },
       },
     });
-    res.status(201).json(order);
+    res.status(201).json({message: "success"});
   } catch {
     return res.status(400).json({ error: "invalid request" });
   }
 });
 
-app.post("/api/comment", async (req: RequestUser, res: Response) => {
+app.post("/api/comment", csrfProtection, validateCommentBody,  async (req: RequestUser, res: Response, next) => {
+  try {
   const { itemId, text } = req.body;
+
+  const origin = req.get('origin');
+
+  if (origin !== 'https://localhost:3000') {
+    return res.status(403).json({ error: 'Invalid origin' });
+  }
 
   const userId = req.user.id;
 
@@ -557,38 +617,27 @@ app.post("/api/comment", async (req: RequestUser, res: Response) => {
       },
     });
 
-    res.status(201).json(comment);
+    res.status(201).json({message: "success"});
   }catch (error) {
     console.error("Error occurred while creating comment:", error);
     return res.status(400).json({ error: "invalid request" });
+  }}
+  catch (error) {
+    next(error); 
+  };
+});
+
+
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  if (err.code === 'ForbiddenError: invalid csrf token') {
+    return res.status(403).json({ message: "Invalid CSRF token" });
   }
+  // Inne błędy
+  res.status(err.status || 500).json({ message: err.message });
 });
-/**
-app.get("*", (req, res) => {
-  const nonce = res.locals.nonce;
-  res.send(
-    `
-    <!doctype html>
-    <html lang="en" class="">
-    <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" http-equiv="Content-Security-Policy" content=" style-src 'self' 'nonce-${nonce}'; script-src 'self' 'nonce-${nonce}';"  />
-    <title>Shop</title>
-    <script type="module" crossorigin src="/assets/index-BcNv_1ug.js"> window.__nonce = "${nonce}";</script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CNpdqj83.css">
-    </head>
-    <body class="dark:bg-gradient-to-r
-    dark:from-gray-900 dark:to-gray-800">
-    <div id="root"></div>
 
-    </body>
-    </html>
 
-  `
-  );
-});
- */
 
 app.get("*", (req: Request, res: Response) => {
   const indexPath = path.join(__dirname, "dist", "index.html");

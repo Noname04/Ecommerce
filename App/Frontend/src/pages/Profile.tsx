@@ -1,6 +1,8 @@
 import { DataContext } from "../context/DataContext";
 import { useContext, useEffect } from "react";
 
+
+
 const Profile = () => {
   /*
   { Database connect }

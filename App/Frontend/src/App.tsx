@@ -10,6 +10,8 @@ import Category from "./pages/Category";
 import { DataProvider } from "./context/DataContext";
 import { ShoppingCartProvider } from "./context/ShoppingCartContext";
 
+
+
 function App() {
   return (
     <>
