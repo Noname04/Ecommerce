@@ -42,7 +42,7 @@ const validateRegisterBody = [
     .withMessage("invalid email length"),
 
   body("phoneNumber")
-    .optional({nullable: true})
+    .optional({checkFalsy: true})
     .isMobilePhone()
     .withMessage("invalid phone number format"),
 

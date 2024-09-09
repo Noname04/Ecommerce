@@ -10,7 +10,7 @@ const Profile = () => {
   const { showUserDetails, userDetails } = useContext(DataContext);
   useEffect(() => {
     showUserDetails();
-  }, [showUserDetails]);
+  }, []);
   return (
     <div className="flex-col justify-center px-10 ">
       {/* user info */}
