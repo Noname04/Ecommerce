@@ -9,18 +9,18 @@ const validateCommentBody = [
 ];
 
 const validateLoginBody = [
-  body("email")
+  body("username")
     .notEmpty()
-    .withMessage("missing email address")
-    .isEmail()
-    .withMessage("invalid email address format"),
+    .withMessage("missing username ")
+    .isString()
+    .withMessage("invalid username type"),
 
   body("password")
     .notEmpty()
     .withMessage("missing password")
     .isString()
     .withMessage("invalid password data type")
-    .isLength({ min: 6, max: 100 })
+    .isLength({ min: 2, max: 100 })
     .withMessage("invalid password length"),
 ];
 
@@ -30,7 +30,7 @@ const validateRegisterBody = [
     .withMessage("missing username")
     .isString()
     .withMessage("invalid username data type")
-    .isLength({ min: 6, max: 50 })
+    .isLength({ min: 2, max: 50 })
     .withMessage("invalid username length"),
 
   body("email")
@@ -41,12 +41,17 @@ const validateRegisterBody = [
     .isLength({ max: 256 })
     .withMessage("invalid email length"),
 
+  body("phoneNumber")
+    .optional({nullable: true})
+    .isMobilePhone()
+    .withMessage("invalid phone number format"),
+
   body("password")
     .notEmpty()
     .withMessage("missing password")
     .isString()
     .withMessage("invalid password data type")
-    .isLength({ min: 6, max: 100 })
+    .isLength({ min: 2, max: 100 })
     .withMessage("invalid password length"),
 ];
 

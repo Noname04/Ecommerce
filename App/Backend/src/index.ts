@@ -130,7 +130,7 @@ app.use(
           return `'nonce-${expressRes.locals.nonce}'`;
         },
       ],
-      imgSrc: ["'self'", "https://m.media-amazon.com/"],
+      imgSrc: ["'self'", "https://www.pexels.com", "https://images.pexels.com"],
       connectSrc: ["'self'"],
       fontSrc: ["'self'", "data:"],
       frameAncestors: ["'none'"], //clickJacking protection
@@ -240,6 +240,11 @@ app.get('/api/csrf-token', (req, res) => {
 });
 
 app.post("/api/register",csrfProtection, validateRegisterBody, async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json( "Invalid data" );
+  }
+
   const { email, phoneNumber, username, password } = req.body;
 
   if (!email || !username || !password) {
@@ -271,8 +276,13 @@ app.post("/api/register",csrfProtection, validateRegisterBody, async (req: Reque
 });
 
 app.post("/api/login",csrfProtection, validateLoginBody, async (req: Request, res: Response) => {
-  const { username, password } = req.body;
 
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json("Invalid data");
+  }
+
+  const { username, password } = req.body;
 
   /*
     const query = `SELECT * FROM public."User" WHERE username = '${username}' AND password = '${password}'`;
@@ -323,12 +333,12 @@ app.post("/api/category",csrfProtection, async (req: Request, res: Response) => 
   res.json(category);
 });
 
-app.get("/api/category", async (req: Request, res: Response) => {
+app.get("/api/category",csrfProtection, async (req: Request, res: Response) => {
   const categories = await prisma.category.findMany({});
   return res.status(200).json(categories);
 });
 
-app.get("/api/search", async (req: Request, res: Response) => {
+app.get("/api/search",csrfProtection, async (req: Request, res: Response) => {
   const { search } = req.query;
 
   if (typeof search !== "string") {
@@ -366,7 +376,7 @@ app.get("/api/search", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/api/category/:categoryId", async (req: Request, res: Response) => {
+app.get("/api/category/:categoryId",csrfProtection, async (req: Request, res: Response) => {
   try {
     parseInt(req.params.categoryId, 32);
     const singleCategory = await prisma.category.findFirst({
@@ -378,7 +388,7 @@ app.get("/api/category/:categoryId", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/api/items", async (req: Request, res: Response) => {
+app.post("/api/items",csrfProtection, async (req: Request, res: Response) => {
   const { name, photo, price, amount, sold, description, category } = req.body;
   if (
     !name ||
@@ -414,7 +424,7 @@ app.post("/api/items", async (req: Request, res: Response) => {
 });
 
 app.get(
-  "/api/item/category/:categoryId",
+  "/api/item/category/:categoryId",csrfProtection,
   async (req: Request, res: Response) => {
     try {
       parseInt(req.params.categoryId, 32);
@@ -428,7 +438,7 @@ app.get(
   }
 );
 
-app.get("/api/recommended", async (req: Request, res: Response) => {
+app.get("/api/recommended",csrfProtection, async (req: Request, res: Response) => {
   const recommended = await prisma.item.findMany({
     orderBy: { sold: "desc" },
     take: 10,
@@ -437,7 +447,7 @@ app.get("/api/recommended", async (req: Request, res: Response) => {
   return res.status(200).json(recommended);
 });
 
-app.get("/api/item/:id", async (req: Request, res: Response) => {
+app.get("/api/item/:id",csrfProtection, async (req: Request, res: Response) => {
   try {
     parseInt(req.params.id, 32);
     const item = await prisma.item.findFirst({
@@ -477,7 +487,7 @@ app.put("/api/logout",csrfProtection, async (req: Request, res: Response) => {
 
 app.use(authenticateJWT);
 
-app.get("/api/profile", async (req: RequestUser, res: Response) => {
+app.get("/api/profile",csrfProtection, async (req: RequestUser, res: Response) => {
   const userId = req.user.id;
 
   if (userId === null) {
@@ -514,6 +524,10 @@ app.get("/api/profile", async (req: RequestUser, res: Response) => {
 });
 
 app.post("/api/orders", csrfProtection,validateOrderBody, async (req: RequestUser, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json("Invalid data");
+  }
   const { firstName, lastName, address, zipCode, city, items } = req.body as {
     firstName: string;
     lastName: string;
@@ -583,6 +597,10 @@ app.post("/api/orders", csrfProtection,validateOrderBody, async (req: RequestUse
 });
 
 app.post("/api/comment", csrfProtection, validateCommentBody,  async (req: RequestUser, res: Response, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json("Invalid data");
+  }
   try {
   const { itemId, text } = req.body;
 
